@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#E9E1D6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171412" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Здоровье">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<title>Анализы Валерии</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Layout: одна колонка-бланк; на компьютере таблицы, на телефоне карточки анализов */
+  :root{
+    --bg:#E9E1D6; --surface:#FBF6EF; --paper:#FFFFFF; --ink:#3A332D; --ink-soft:#6B6058; --line:#E5DBCE;
+    --field:#FFFDFB; --field-muted:#F7F4EF; --foot:#FCF9F4;
+    --coral:#D26B52; --coral-bg:#FBE8E1; --coral-soft:#F4D0C4;
+    --lav:#8E78A8; --teal:#4C8C7D;
+    --sage:#5F8A6E; --sage-bg:#E4F0E7; --sage-soft:#C9E2CF; --sage-ink:#34603F;
+    --amber:#CF9244; --amber-bg:#F8EBD6; --amber-soft:#EFD9B4; --amber-ink:#8A5A18;
+    --red:#C0492F; --red-bg:#FBE4DE; --doc-row:#FBEAE4;
+    --ok:#3F7D53; --ok-bg:#E2F0E6; --warn:#A8721A; --warn-bg:#F8ECD4;
+    --helix:#2E7D8A; --invitro:#C0623B; --gemotest:#9B4A66;
+    --on-accent:#FFFFFF; --grand-bg:#3A332D; --grand-ink:#F3EBDE; --grand-card:rgba(255,255,255,.08); --grand-line:rgba(255,255,255,.18);
+    --f-display:'Playfair Display', Georgia, 'Times New Roman', serif;
+    --f-body:'Onest', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+    --bg:#171412; --surface:#211D1A; --paper:#2A2521; --ink:#EEE6DA; --ink-soft:#B3A898; --line:#40372F;
+    --field:#1D1916; --field-muted:#26211D; --foot:#25201C;
+    --coral:#E07F66; --coral-bg:#3A2620; --coral-soft:#5A3A30;
+    --lav:#A592C0; --teal:#66A797;
+    --sage:#79A688; --sage-bg:#1F3227; --sage-soft:#355440; --sage-ink:#A9D4B5;
+    --amber:#D9A25A; --amber-bg:#3A2F1F; --amber-soft:#5A4728; --amber-ink:#E5C28A;
+    --red:#E06A50; --red-bg:#3D221C; --doc-row:#33211C;
+    --ok:#8BCB9E; --ok-bg:#1F3326; --warn:#E3B35E; --warn-bg:#3A2F1A;
+    --helix:#5DB3C0; --invitro:#E38A63; --gemotest:#D07F9C;
+    --on-accent:#FFFFFF; --grand-bg:#0F0D0B; --grand-ink:#F3EBDE;
+    color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#171412; --surface:#211D1A; --paper:#2A2521; --ink:#EEE6DA; --ink-soft:#B3A898; --line:#40372F;
+    --field:#1D1916; --field-muted:#26211D; --foot:#25201C;
+    --coral:#E07F66; --coral-bg:#3A2620; --coral-soft:#5A3A30;
+    --lav:#A592C0; --teal:#66A797;
+    --sage:#79A688; --sage-bg:#1F3227; --sage-soft:#355440; --sage-ink:#A9D4B5;
+    --amber:#D9A25A; --amber-bg:#3A2F1F; --amber-soft:#5A4728; --amber-ink:#E5C28A;
+    --red:#E06A50; --red-bg:#3D221C; --doc-row:#33211C;
+    --ok:#8BCB9E; --ok-bg:#1F3326; --warn:#E3B35E; --warn-bg:#3A2F1A;
+    --helix:#5DB3C0; --invitro:#E38A63; --gemotest:#D07F9C;
+    --on-accent:#FFFFFF; --grand-bg:#0F0D0B; --grand-ink:#F3EBDE;
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0; font-family:var(--f-body); color:var(--ink); background:var(--bg); line-height:1.45;
+    padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));
+    padding-block:18px 60px;
+  }
+  .wrap{max-width:1160px;margin:0 auto;}
+  input,button{font-family:inherit;}
+  :focus-visible{outline:2px solid var(--coral);outline-offset:2px;}
+
+  .sheet{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;}
+  header{padding:22px 24px 18px;}
+  .kicker{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--coral);font-weight:600;margin:0 0 7px;}
+  h1{font-family:var(--f-display);font-weight:900;font-size:29px;line-height:1.08;margin:0;text-wrap:balance;}
+  .sub{font-size:13px;color:var(--ink-soft);margin:7px 0 0;max-width:70ch;}
+
+  .ctrl{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin-top:18px;}
+  .field{display:flex;flex-direction:column;gap:5px;}
+  .field label,.field .lbl{font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);}
+  .fixed{font-weight:700;font-size:14px;padding:8px 12px;background:var(--paper);border:1px solid var(--line);border-radius:9px;}
+  .field input[type=date]{font-size:14px;padding:7px 11px;border:1.5px solid var(--coral-soft);border-radius:9px;background:var(--paper);color:var(--ink);}
+  .grow{flex:1;}
+  .progress{min-width:170px;}
+  .progress .txt{font-size:12px;font-weight:600;}
+  .bar{height:9px;background:var(--line);border-radius:5px;overflow:hidden;margin-top:6px;}
+  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sage),var(--coral));transition:width .3s;}
+  .btns{display:flex;gap:9px;flex-wrap:wrap;}
+  button{font-size:13px;font-weight:600;padding:10px 16px;border-radius:9px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;}
+  button:hover{border-color:var(--coral);color:var(--coral);}
+  button.save{background:var(--sage);border-color:var(--sage);color:var(--on-accent);}
+  button.save:hover{filter:brightness(.93);color:var(--on-accent);}
+  button.danger{border-color:var(--red);color:var(--red);}
+
+  .status{margin-top:10px;font-size:12px;color:var(--sage-ink);min-height:17px;}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:11.5px;color:var(--ink-soft);align-items:center;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;}
+  .lg-empty{width:15px;height:15px;border-radius:4px;border:2px solid var(--ink-soft);flex-shrink:0;}
+  .docmark{display:inline-block;font-size:8.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--on-accent);background:var(--red);border-radius:20px;padding:1px 7px;vertical-align:middle;margin-left:4px;}
+  .legend .docmark{margin:0;}
+
+  .note{margin:0 24px 14px;padding:11px 15px;border-radius:10px;background:var(--amber-bg);border:1px solid var(--amber-soft);font-size:12px;color:var(--amber-ink);line-height:1.45;}
+  .note b{font-weight:700;}
+  main{padding:0 24px 22px;}
+
+  .block{margin-top:16px;border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--paper);}
+  .bhead{padding:9px 16px;color:var(--on-accent);font-weight:700;font-size:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .bhead .n{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.28);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;}
+  .bhead .tag{margin-left:auto;font-weight:500;font-size:11px;opacity:.95;}
+  .b-iron .bhead{background:var(--coral);} .b-thy .bhead{background:var(--lav);} .b-vit .bhead{background:var(--sage);}
+  .b-carb .bhead{background:var(--amber);} .b-andr .bhead{background:var(--teal);} .b-ven .bhead{background:var(--gemotest);} .b-blood .bhead{background:var(--lav);}
+
+  table{width:100%;border-collapse:collapse;}
+  thead th{font-size:9px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.03em;padding:7px 4px;text-align:left;border-bottom:1px solid var(--line);}
+  th.c-chk{width:34px;text-align:center;} th.c-ref{width:118px;} th.c-prev{width:50px;text-align:center;}
+  th.c-new{width:74px;text-align:center;} th.c-price{width:60px;text-align:center;} th.c-dyn{width:108px;}
+  th .lab{display:block;font-size:9px;font-weight:700;}
+  th.h-helix .lab{color:var(--helix);} th.h-invitro .lab{color:var(--invitro);} th.h-gemotest .lab{color:var(--gemotest);}
+  tbody td{padding:6px 4px;font-size:12.5px;border-bottom:1px solid var(--line);vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:none;}
+  tr.doc td:first-child{box-shadow:inset 3px 0 0 var(--red);}
+  tr.doc td{background:var(--doc-row);}
+  tr.done td{background:var(--sage-bg);}
+  td.chk{text-align:center;}
+  .cbx{appearance:none;-webkit-appearance:none;width:20px;height:20px;border:2px solid var(--ink-soft);border-radius:5px;background:var(--paper);cursor:pointer;vertical-align:middle;position:relative;margin:0;}
+  .cbx:checked{background:var(--sage);border-color:var(--sage);}
+  .cbx:checked::after{content:"";position:absolute;left:5px;top:1px;width:5px;height:10px;border:solid var(--on-accent);border-width:0 2.5px 2.5px 0;transform:rotate(45deg);}
+  .aname{font-weight:600;}
+  .unit{color:var(--ink-soft);font-weight:400;font-size:10.5px;}
+  .calc{font-size:9px;color:var(--ink-soft);}
+  td.ref{font-size:10.5px;color:var(--ink-soft);line-height:1.3;}
+  td.ref b{color:var(--ink);font-weight:600;}
+  td.prev{text-align:center;font-weight:700;font-variant-numeric:tabular-nums;}
+  td.prev .nd{color:var(--ink-soft);font-weight:400;}
+  td.newv{text-align:center;}
+  td.newv input{width:72px;font-size:13px;font-weight:600;text-align:center;padding:6px 3px;border:1.5px solid var(--coral-soft);border-radius:8px;background:var(--field);color:var(--ink);font-variant-numeric:tabular-nums;}
+  td.newv input[readonly]{background:var(--amber-bg);border-color:var(--amber-soft);color:var(--amber-ink);}
+  td.newv input.st-ok{border-color:var(--ok);background:var(--ok-bg);}
+  td.newv input.st-low,td.newv input.st-under{border-color:var(--warn);background:var(--warn-bg);}
+  td.newv input.st-pos{border-color:var(--red);background:var(--red-bg);}
+  td.newv input.st-neg{border-color:var(--ok);background:var(--ok-bg);}
+  td.newv input.st-high{border-color:var(--red);background:var(--red-bg);}
+  td.price{text-align:center;}
+  td.price input{width:54px;font-size:11.5px;font-weight:600;text-align:center;padding:5px 2px;border:1px solid var(--line);border-radius:7px;background:var(--field-muted);color:var(--ink-soft);font-variant-numeric:tabular-nums;}
+  td.price .dash{color:var(--ink-soft);opacity:.5;}
+  td.dyn{font-size:11px;}
+  .badge{display:inline-block;font-weight:700;font-size:10.5px;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+  .b-ok,.b-neg{background:var(--ok-bg);color:var(--ok);} .b-pos{background:var(--red-bg);color:var(--red);} .b-low,.b-under{background:var(--warn-bg);color:var(--warn);} .b-high{background:var(--red-bg);color:var(--red);}
+  .delta{display:block;margin-top:3px;font-weight:600;font-size:10.5px;}
+  .delta.good{color:var(--ok);} .delta.bad{color:var(--red);} .delta.neutral{color:var(--ink-soft);}
+
+  tfoot td{padding:10px 14px;border-top:2px solid var(--line);background:var(--foot);}
+  .blocktotal{display:flex;align-items:center;gap:9px;flex-wrap:wrap;font-size:12px;}
+  .blocktotal .lbl{font-weight:600;flex:1;min-width:150px;}
+  .pill{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:12px;padding:5px 11px;border-radius:20px;border:1.5px solid;font-variant-numeric:tabular-nums;}
+  .pill .nm{font-size:9.5px;letter-spacing:.03em;text-transform:uppercase;}
+  .pill.helix{border-color:var(--helix);color:var(--helix);} .pill.invitro{border-color:var(--invitro);color:var(--invitro);} .pill.gemotest{border-color:var(--gemotest);color:var(--gemotest);}
+
+  .grand{margin-top:20px;border-radius:15px;padding:18px 20px;background:var(--grand-bg);color:var(--grand-ink);}
+  .grand h2{font-family:var(--f-display);font-size:19px;font-weight:700;margin:0 0 3px;}
+  .grand .gsub{font-size:12px;opacity:.8;margin:0 0 14px;}
+  .gcards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+  .gcard{background:var(--grand-card);border:1px solid var(--grand-line);border-radius:12px;padding:14px 16px;position:relative;}
+  .gcard.best{border-color:#8FD2DD;}
+  .gcard .gnm{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;}
+  .gcard.helix .gnm{color:#8FD2DD;} .gcard.invitro .gnm{color:#F0A882;} .gcard.gemotest .gnm{color:#E09BB5;}
+  .gval{font-family:var(--f-display);font-size:28px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums;}
+  .gval small{font-size:15px;opacity:.7;}
+  .gcnt{font-size:11px;opacity:.7;margin-top:5px;}
+  .bestmark{position:absolute;top:10px;right:12px;font-size:9px;font-weight:700;text-transform:uppercase;color:#1A1A1A;background:#8FD2DD;border-radius:20px;padding:2px 8px;}
+  .cheaper{margin-top:12px;font-size:12.5px;padding:9px 13px;background:var(--grand-card);border-radius:9px;}
+
+  .info{margin-top:14px;padding:12px 16px;background:var(--paper);border:1px solid var(--line);border-radius:11px;font-size:12px;line-height:1.5;}
+  .info h3{font-family:var(--f-display);font-size:15px;margin:0 0 6px;}
+  .info ul{margin:0;padding-left:18px;}
+  .info li{margin:3px 0;}
+  .info b{color:var(--coral);}
+  .foot{margin-top:14px;text-align:center;font-size:11px;color:var(--ink-soft);}
+
+  @media (max-width:980px){ th.c-ref,td.ref{display:none;} }
+
+  /* Телефон: строки таблицы становятся карточками */
+
+  a.navbtn{display:inline-flex;align-items:center;font-size:13px;font-weight:600;padding:10px 16px;border-radius:9px;border:1.5px solid var(--coral);background:var(--coral-bg);color:var(--coral);text-decoration:none;}
+  a.navbtn:hover{background:var(--coral);color:var(--on-accent);}
+  .kicker a.home{color:inherit;text-decoration:none;}
+  .kicker a.home:hover{text-decoration:underline;}
+  /* компактная шапка */
+  .ctrl{margin-top:14px;}
+  .btns{align-items:flex-end;}
+  .more{position:relative;}
+  .menu{position:absolute;right:0;top:calc(100% + 6px);z-index:40;min-width:240px;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.16);padding:6px;display:flex;flex-direction:column;gap:2px;}
+  .menu button{border:0;background:transparent;text-align:left;padding:10px 12px;border-radius:8px;font-weight:500;}
+  .menu button:hover{background:var(--field-muted);color:var(--ink);}
+  .menu .danger-t{color:var(--red);}
+  .howto{margin-top:10px;font-size:12.5px;color:var(--ink-soft);}
+  .howto summary{cursor:pointer;font-weight:600;color:var(--ink);font-size:12.5px;}
+  .howto ul{margin:8px 0 0;padding-left:18px;}
+  .howto li{margin:4px 0;text-align:justify;}
+  /* нижняя панель */
+  body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px));}
+  .sbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--grand-bg);color:var(--grand-ink);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));box-shadow:0 -6px 20px rgba(0,0,0,.15);}
+  .sb-in{max-width:1160px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .sb-prog{flex:1 1 140px;min-width:120px;}
+  .sb-prog .txt{font-size:12px;} .sb-prog .bar{background:rgba(255,255,255,.18);height:6px;margin-top:5px;}
+  .sb-sums{display:flex;gap:6px;flex:2 1 280px;}
+  .sb-s{flex:1 1 0;min-width:0;border:1px solid var(--grand-line);border-radius:9px;padding:4px 8px;display:flex;flex-direction:column;line-height:1.15;}
+  .sb-s i{font-style:normal;font-size:9.5px;letter-spacing:.04em;text-transform:uppercase;opacity:.75;}
+  .sb-s b{font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .sb-s b::after{content:" ₽";font-weight:400;opacity:.7;}
+  .sb-s.best{border-color:#8FD2DD;background:rgba(143,210,221,.14);}
+  .sb-s.best i::after{content:" · дешевле";}
+  /* история */
+  td.prev .pd{display:block;font-size:9.5px;font-weight:400;color:var(--ink-soft);}
+  .spark{display:block;margin-top:4px;}
+  .tipbox .tip-hist{margin-top:8px;padding-top:7px;border-top:1px solid var(--line);font-size:11.5px;}
+  .tipbox .tip-hist b{font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);display:block;margin-bottom:3px;}
+  .tipbox .tip-hist span{display:inline-block;margin-right:10px;white-space:nowrap;font-variant-numeric:tabular-nums;}
+  td.brk{display:none;}
+  @media (max-width:820px){
+    header{padding:18px 16px 14px;} .note{margin:0 16px 12px;} main{padding:0 12px 18px;}
+    h1{font-size:23px;}
+    table,tbody,tfoot,tr{display:block;width:100%;}
+    thead{display:none;}
+    tbody tr{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;padding:13px 14px;border-bottom:1px solid var(--line);position:relative;}
+    tbody tr:last-child{border-bottom:none;}
+    tbody td{border:none;padding:0;background:transparent !important;box-shadow:none !important;}
+    tr.doc{background:var(--doc-row);border-left:4px solid var(--red);}
+    tr.done{background:var(--sage-bg);}
+    td.name{order:1;flex:1 1 100%;font-size:14px;padding-right:44px;}
+    td.chk{position:absolute;top:12px;right:14px;}
+    td.chk .cbx{width:26px;height:26px;}
+    td.chk .cbx:checked::after{left:8px;top:3px;width:6px;height:12px;}
+    td.ref{display:block !important;order:2;flex:1 1 100%;font-size:11.5px;}
+    td.ref::before{content:"Норма: ";font-weight:600;color:var(--ink);}
+    td.prev{order:3;font-size:14px;}
+    td.prev::before{content:"было ";color:var(--ink-soft);font-weight:400;font-size:11.5px;}
+    td.newv{order:4;display:flex;align-items:center;gap:6px;}
+    td.newv::before{content:"стало";color:var(--ink-soft);font-size:11.5px;}
+    td.newv input{width:84px;padding:9px 6px;font-size:15px;}
+    td.dyn{order:5;flex:1 1 auto;}
+    td.brk{display:block;order:6;flex:1 1 100%;height:0;}
+    td.price{order:7;flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:3px;text-align:left;}
+    td.price::before{font-size:10px;font-weight:700;}
+    td.price.h-helix::before{content:"Helix ₽";color:var(--helix);}
+    td.price.h-invitro::before{content:"Invitro ₽";color:var(--invitro);}
+    td.price.h-gemotest::before{content:"Гемотест ₽";color:var(--gemotest);}
+    td.price input{width:100%;padding:8px 2px;font-size:14px;}
+    td.dyn{flex:1 1 120px;}
+    .menu{right:auto;left:0;}
+    .sb-sums{flex-basis:100%;}
+    body{padding-bottom:calc(130px + env(safe-area-inset-bottom,0px));}
+    .sbar{padding-top:8px;}
+    .sb-in{gap:8px;}
+    tfoot td{display:block;}
+    .gcards{grid-template-columns:minmax(0,1fr);}
+  }
+
+  .aname{cursor:help;border-bottom:1px dotted var(--ink-soft);display:inline;}
+  .aname:focus-visible{outline:2px solid var(--coral);outline-offset:2px;border-radius:3px;}
+  .why-i{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;border:1px solid var(--ink-soft);color:var(--ink-soft);font-size:9px;font-weight:700;font-style:italic;margin-left:5px;vertical-align:1px;font-family:Georgia,serif;}
+  .tipbox{position:fixed;z-index:50;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:11px;box-shadow:0 10px 30px rgba(0,0,0,.18);padding:11px 13px;font-size:12.5px;line-height:1.45;pointer-events:none;}
+  .tipbox .tip-h{font-weight:700;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--coral);margin-bottom:4px;}
+  .tipbox .tip-b{text-align:justify;}
+  .delrow{margin-left:6px;padding:0 7px;font-size:13px;line-height:18px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--ink-soft);}
+  .delrow.armed{border-color:var(--red);color:var(--red);font-size:11px;}
+  tr.custom td.name .aname{font-style:normal;}
+  .addbtn{background:transparent;border:1.5px dashed var(--line);color:var(--ink-soft);width:100%;padding:8px;font-weight:600;}
+  .addbtn:hover{border-color:var(--coral);color:var(--coral);}
+  .addform{border:1px solid var(--line);border-radius:10px;padding:12px;background:var(--surface);}
+  .af-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,120px),1fr));gap:9px;}
+  .af-grid label{display:flex;flex-direction:column;gap:4px;font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);min-width:0;}
+  .af-grid label.af-wide{grid-column:span 2;}
+  @media (max-width:520px){ .af-grid label.af-wide{grid-column:1/-1;} }
+  .af-grid input{font:inherit;font-size:13px;text-transform:none;letter-spacing:0;padding:7px 9px;border:1.5px solid var(--line);border-radius:8px;background:var(--field);color:var(--ink);min-width:0;}
+  .af-btns{display:flex;gap:9px;align-items:center;margin-top:10px;flex-wrap:wrap;}
+  .af-err{font-size:12px;color:var(--red);}
+  tfoot tr:first-child td{border-top:1px solid var(--line);background:var(--paper);}
+  @media (prefers-reduced-motion: reduce){ .bar i{transition:none;} }
+
+  /* ===== правки v4 ===== */
+  [hidden]{display:none!important;}
+  body{font-size:13px;}
+  h1{font-size:23px;}
+  .kicker{font-size:10px;margin-bottom:5px;letter-spacing:.14em;}
+  button,a.navbtn{font-size:12.5px;padding:8px 12px;}
+  .field input[type=date]{font-size:14px;padding:6px 10px;min-height:38px;}
+  .bhead{width:100%;border:0;border-radius:0;text-align:left;font-family:inherit;font-size:13px;padding:8px 14px;cursor:pointer;}
+  .bhead:hover{color:var(--on-accent);filter:brightness(.96);}
+  .bhead .bt{flex:1 1 auto;min-width:0;}
+  .bhead .tag{margin-left:0;font-size:10.5px;}
+  .bhead .chev{flex:0 0 auto;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin:0 4px 3px 6px;transition:transform .2s;}
+  .block.collapsed .bhead .chev{transform:rotate(-45deg);margin-bottom:0;}
+  .block.collapsed thead,.block.collapsed tbody,.block.collapsed tfoot tr:first-child{display:none!important;}
+  .block.collapsed tfoot td{border-top:0;}
+  .blocktotal{flex-wrap:nowrap;gap:8px;font-size:11.5px;}
+  .blocktotal .lbl{flex:0 1 auto;min-width:0;white-space:nowrap;}
+  .blocktotal .pills{display:flex;gap:6px;flex:1 1 auto;justify-content:flex-end;min-width:0;}
+  .pill{font-size:11.5px;padding:4px 9px;gap:4px;white-space:nowrap;}
+  .pill .nm{font-size:8.5px;}
+  tbody td{font-size:12px;}
+  td.newv input{font-size:14px;}
+  .tipbox{font-size:12px;}
+  .sbar{left:8px;right:8px;bottom:calc(64px + env(safe-area-inset-bottom,0px));border-radius:14px;padding:8px 12px;}
+  body{padding-bottom:calc(160px + env(safe-area-inset-bottom,0px));}
+  .sb-prog .txt{font-size:11px;}
+  .sb-s{padding:3px 7px;} .sb-s b{font-size:13px;} .sb-s i{font-size:8.5px;}
+  @media (max-width:820px){
+    h1{font-size:19px;}
+    header{padding:14px 14px 10px;}
+    main{padding:0 10px 14px;}
+    .btns{gap:7px;}
+    tbody tr{padding:10px 12px;gap:6px 8px;}
+    td.name{font-size:13px;}
+    td.ref{font-size:10.5px;}
+    td.prev{font-size:13px;}
+    td.prev::before,td.newv::before{font-size:10.5px;}
+    td.newv input{width:76px;padding:6px 4px;font-size:15px;}
+    td.price::before{font-size:9px;}
+    td.price input{font-size:13px;padding:6px 2px;}
+    td.chk .cbx{width:24px;height:24px;}
+    .blocktotal{flex-wrap:wrap;gap:6px;}
+    .blocktotal .lbl{flex:1 1 100%;font-size:11px;}
+    .blocktotal .pills{flex:1 1 100%;justify-content:space-between;}
+    .blocktotal .pill{flex:1 1 0;flex-direction:column;justify-content:center;align-items:center;gap:1px;padding:3px 4px;font-size:12px;line-height:1.15;border-radius:10px;min-width:0;}
+    .blocktotal .pill .nm{font-size:8px;}
+    tfoot td{padding:8px 10px;}
+    .sbar{left:6px;right:6px;}
+    body{padding-bottom:calc(180px + env(safe-area-inset-bottom,0px));}
+  }
+
+  /* ===== правки v5 ===== */
+  .toprow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;}
+  .toprow .kicker{margin:0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(8.5px,2.45vw,11px);letter-spacing:.05em;}
+  .toprow a.navbtn{flex:0 0 auto;padding:6px 11px;font-size:12px;}
+  .ctrl{flex-direction:column;align-items:stretch;gap:8px;margin-top:10px;}
+  .daterow{display:flex;align-items:flex-end;gap:8px;}
+  .daterow .field{flex:1 1 auto;min-width:0;}
+  .daterow .field input[type=date]{width:100%;}
+  .daterow .save{flex:0 0 auto;}
+  .btns{flex-wrap:nowrap;}
+  .btns > button{flex:1 1 auto;min-width:0;white-space:nowrap;}
+  .more{flex:0 0 auto;}
+  .menu{left:auto;right:0;}
+  @media (max-width:820px){ .menu{left:auto;right:0;} }
+  /* нижняя панель — у самого края экрана */
+  .sbar{left:0;right:0;bottom:0;border-radius:14px 14px 0 0;padding:7px max(12px,env(safe-area-inset-right,0px)) calc(7px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));}
+  body{padding-bottom:calc(110px + env(safe-area-inset-bottom,0px));}
+  @media (max-width:820px){ .sbar{left:0;right:0;} body{padding-bottom:calc(120px + env(safe-area-inset-bottom,0px));} }
+  /* компактные свёрнутые разделы */
+  .block.collapsed{margin-top:8px;}
+  .block.collapsed .bhead{padding:6px 12px;font-size:12.5px;}
+  .block.collapsed .bhead .tag{display:none;}
+  .block.collapsed .bhead .n{width:18px;height:18px;font-size:10px;}
+  .block.collapsed tfoot td{padding:5px 8px;}
+  .block.collapsed .blocktotal .lbl{display:none;}
+  .block.collapsed .blocktotal .pills{flex:1 1 100%;justify-content:space-between;}
+  .block.collapsed .blocktotal .pill{flex:1 1 0;flex-direction:row;justify-content:center;gap:5px;padding:2px 4px;font-size:11px;border-radius:20px;}
+  .block.collapsed .blocktotal .pill .nm{font-size:8px;}
+
+  /* ===== правки v6: компактная шапка ===== */
+  .toprow .kicker{text-transform:none;letter-spacing:0;font-weight:600;font-size:12px;}
+  .toprow a.navbtn{padding:5px 10px;font-size:12px;}
+  .daterow .field{flex-direction:row;align-items:center;gap:8px;}
+  .daterow .field label{white-space:nowrap;}
+  .status{margin-top:6px;font-size:11px;min-height:14px;}
+  .howto{margin-top:4px;}
+  .howto summary{font-size:12px;}
+  @media (max-width:820px){
+    body{padding-top:8px;}
+    header{padding:10px 12px 6px;}
+    h1{font-size:17px;line-height:1.15;}
+    .ctrl{margin-top:8px;gap:6px;}
+    .daterow .field input[type=date]{min-height:34px;padding:4px 8px;}
+    .btns > button,.more > button,.daterow .save{padding:7px 10px;font-size:12px;}
+    .block{margin-top:10px;}
+    .block.collapsed{margin-top:6px;}
+    .block.collapsed .bhead{padding:5px 10px;font-size:12px;}
+    .block.collapsed tfoot td{padding:4px 8px;}
+    .block.collapsed .blocktotal .pill{padding:1px 4px;font-size:10.5px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="sheet">
+  <header>
+    <div class="toprow">
+      <p class="kicker"><a class="home" href="index.html">← Назад</a> · Анализы для энергии и здоровья волос</p>
+      <a class="navbtn" href="zdorovye.html">Дашборд →</a>
+    </div>
+    <h1>Анализы: энергия и волосы</h1>
+    <div class="ctrl">
+      <div class="daterow">
+        <div class="field"><label for="newdate">Дата новых анализов</label><input type="date" id="newdate"></div>
+      </div>
+      <div class="btns">
+        <button id="btnCommit" type="button" title="Перенести введённые результаты в историю">В историю</button>
+        <button id="btnAll" type="button">Отметить назначенное</button>
+        <div class="more">
+          <button id="btnMore" type="button" aria-haspopup="true" aria-expanded="false">Ещё ▾</button>
+          <div class="menu" id="menu" hidden>
+            <button id="btnFold" type="button">Свернуть / развернуть все разделы</button>
+            <button id="btnExport" type="button">Отчёт с результатами</button>
+            <button id="btnBackup" type="button">Сохранить копию данных</button>
+            <button id="btnRestore" type="button">Загрузить копию</button>
+            <button id="btnUndo" type="button">Отменить последний перенос</button>
+            <button id="btnReset" type="button" class="danger-t">Очистить текущие отметки</button>
+          </div>
+        </div>
+        <input type="file" id="fileRestore" accept="application/json,.json" hidden>
+      </div>
+    </div>
+    <div class="status" id="status" aria-live="polite"></div>
+    <details class="howto">
+      <summary>Как пользоваться</summary>
+      <ul>
+        <li>Галочкой отметь, что сдаёшь. Суммы по трём лабораториям — в нижней панели и в итогах каждого раздела. <span class="docmark">врач</span> — назначено врачом 13.10, кнопка «Отметить назначенное» ставит их галочки разом.</li>
+        <li>Впиши результат в «стало»: строка покажет оценку и изменение к прошлому разу.</li>
+        <li>Когда все результаты вписаны, укажи дату и нажми «В историю»: значения сохранятся с этой датой, а поля очистятся для следующего раза. В строке появится мини-график.</li>
+        <li>Нажми на название анализа (на компьютере — наведи мышку): там пояснение «зачем» и история значений.</li>
+        <li>Разделы сворачиваются нажатием на цветной заголовок — останутся название и суммы.</li>
+        <li><b>(КОК)</b> — результат искажает приём Мидианы: андрогены и 17-ОН прогестерон занижены; ГСПГ, пролактин, ОЖСС и трансферрин завышены; СРБ и витамин D могут быть немного выше. Сравнивай только анализы на одном фоне.</li>
+        <li>Данные хранятся в этом телефоне и работают без интернета. Раз в месяц делай «Ещё → Сохранить копию данных».</li>
+        <li>Цены ориентировочные — перепиши на актуальные. Внизу каждого раздела можно добавить свой анализ.</li>
+      </ul>
+    </details>
+  </header>
+
+  <main id="main"></main>
+</div>
+<div class="sbar" id="sbar"><div class="sb-in">
+  <div class="sb-prog"><div class="txt">Отмечено <b id="done">0</b> из <span id="total">0</span></div><div class="bar"><i id="barfill"></i></div></div>
+  <div class="sb-sums"><span class="sb-s helix" data-sb="helix"><i>Helix</i><b id="sb-helix">0</b></span><span class="sb-s invitro" data-sb="invitro"><i>Invitro</i><b id="sb-invitro">0</b></span><span class="sb-s gemotest" data-sb="gemotest"><i>Гемотест</i><b id="sb-gemotest">0</b></span></div>
+</div></div>
+<p class="foot">Нормы и цены ориентировочные: сверяй с бланком своей лаборатории. Страница не заменяет консультацию врача.</p>
+</div>
+
+<script>
+(function(){
+'use strict';
+var LABS=['helix','invitro','gemotest'], LABN={helix:'Helix',invitro:'Invitro',gemotest:'Гемотест'};
+var PREVD='24.12';
+// [key, name, unit, ref, prev, low, high, target, dir, important, prices(h,i,g) | null, kind]
+// kind: n — число, q — инфекция (отр/пол), c — расчёт
+var BLOCKS=[
+ {cls:'b-iron',n:1,title:'Кровь и обмен железа',tag:'главный блок · сдавать утром',rows:[
+  ['hb','Гемоглобин (ОАК)','г/л','<b>117–155</b>, цель ≥120',127,117,155,120,'up',1,[650,760,400],'n'],
+  ['ferritin','Ферритин','нг/мл','<b>10–120</b>, цель 40–70',14,10,120,40,'up',1,[650,820,600],'n'],
+  ['iron','Железо сывороточное','мкмоль/л','<b>9–30</b>',null,9,30.4,null,'up',0,[350,400,300],'n'],
+  ['tibc','ОЖСС (КОК)','мкмоль/л','<b>45–77</b>',null,45,77,null,'down',0,[550,690,500],'n'],
+  ['transferrin','Трансферрин (КОК)','г/л','<b>2.0–3.6</b>',null,2,3.6,null,'down',0,[650,780,600],'n'],
+  ['tsat','Насыщение трансферрина','% · обычно в комплексе','<b>15–45</b>, цель ≥25',null,15,45,25,'up',0,[0,0,0],'n'],
+  ['crp','СРБ (КОК)','мг/л','<b>&lt;5</b>',7.2,0,5,null,'down',1,[550,680,450],'n']]},
+ {cls:'b-thy',n:2,title:'Щитовидная железа',tag:'ТТГ назначил врач',rows:[
+  ['tsh','ТТГ','мЕд/л','<b>0.4–4.0</b>, для зачатия ≤2.5',1.95,0.4,4,null,'neutral',1,[500,620,450],'n'],
+  ['ft4','Т4 свободный','пмоль/л','<b>9–19</b>',null,9,19,null,'neutral',0,[500,620,450],'n'],
+  ['ft3','Т3 свободный','пмоль/л','<b>2.6–5.7</b>',null,2.6,5.7,null,'neutral',0,[520,640,480],'n'],
+  ['atpo','АТ-ТПО','Ед/мл','<b>&lt;34</b>',null,0,34,null,'down',0,[600,740,550],'n'],
+  ['attg','АТ-ТГ','Ед/мл','<b>&lt;115</b>',null,0,115,null,'down',0,[600,740,550],'n']]},
+ {cls:'b-vit',n:3,title:'Витамины и микроэлементы',tag:'витамин D назначил врач',rows:[
+  ['vitd','Витамин D (25-ОН) (КОК)','нг/мл','<b>30–100</b>, цель 50–60',34,30,100,50,'up',1,[1900,2400,1600],'n'],
+  ['b12','B12 активный','пмоль/л','<b>&gt;35</b>, цель ≥50',null,35,150,50,'up',0,[2100,2500,1900],'n'],
+  ['folate','Фолаты','нг/мл','<b>&gt;3.9</b>, цель ≥6',null,3.9,26.8,6,'up',0,[750,900,650],'n'],
+  ['zinc','Цинк','мкмоль/л','<b>11–18</b>',null,11,18,null,'up',0,[750,900,700],'n'],
+  ['selenium','Селен','мкг/л','<b>70–120</b>',null,70,120,null,'up',0,[1250,1500,1200],'n'],
+  ['omega3','Омега-3 индекс','% · кожа, сухость','<b>8–12</b>, ниже 4 — дефицит',null,4,12,8,'up',0,[3500,3800,3300],'n']]},
+ {cls:'b-carb',n:4,title:'Углеводный обмен',tag:'дополнение · сахар и СПКЯ',rows:[
+  ['glucose','Глюкоза натощак','ммоль/л','<b>3.9–5.5</b>',null,3.9,5.5,null,'down',0,[250,300,200],'n'],
+  ['insulin','Инсулин натощак','мкЕд/мл','<b>2.6–24.9</b>, лучше &lt;10',null,2.6,10,null,'down',0,[600,750,550],'n'],
+  ['homa','HOMA-IR','считается сам','<b>&lt;2.7</b>, лучше &lt;2.0',null,0,2.7,null,'down',0,null,'c'],
+  ['hba1c','Гликированный Hb (HbA1c)','%','<b>&lt;5.7</b>',null,4,5.7,null,'down',0,[600,750,550],'n']]},
+ {cls:'b-andr',n:5,title:'Андрогены и пролактин',tag:'кожа и волосы · на КОК результаты ниже',rows:[
+  ['dht','ДГТ (дигидротестостерон) (КОК)','пг/мл','<b>24–368</b> · сверь с бланком',null,24,368,null,'down',1,[1250,1400,1100],'n'],
+  ['freetesto','Тестостерон свободный (КОК)','пг/мл','<b>0.3–4.1</b> · сверь с бланком',null,0.3,4.1,null,'down',1,[750,900,700],'n'],
+  ['ohp17','17-ОН прогестерон (КОК)','нг/мл','<b>0.1–0.8</b> (фолликулярная фаза)',null,0.1,0.8,null,'down',1,[700,850,650],'n'],
+  ['prolactin','Пролактин (КОК)','мЕд/л','<b>&lt;557</b>; на КОК бывает выше',626,64,557,null,'down',1,[500,620,450],'n'],
+  ['macroprl','Макропролактин','% · уточняет пролактин','по бланку: доля макропролактина',null,null,null,null,'neutral',0,[900,1100,850],'n'],
+  ['testo','Тестостерон общий (КОК)','нмоль/л','<b>0.29–1.67</b> · сверь с бланком',null,0.29,1.67,null,'down',0,[450,590,400],'n'],
+  ['shbg','ГСПГ (SHBG) (КОК)','нмоль/л · на КОК выше','<b>26–110</b> · сверь с бланком',null,26,110,null,'neutral',0,[650,790,550],'n'],
+  ['dheas','ДГЭА-сульфат (КОК)','мкг/дл · андрогены надпочечников','<b>98.8–340</b> · сверь с бланком',null,98.8,340,null,'down',0,[500,620,450],'n'],
+  ['androst','Андростендион (КОК)','нг/мл','<b>0.3–3.3</b> · сверь с бланком',null,0.3,3.3,null,'down',0,[900,1050,800],'n']]}
+];
+
+var STORE='lera_labs_artifact_v1';
+var HIST_SEED={"ferritin": [{"d": "2026-06-01", "v": "14"}], "vitd": [{"d": "2026-06-01", "v": "34"}], "prolactin": [{"d": "2026-06-01", "v": "626"}], "tsh": [{"d": "2026-06-01", "v": "1,95"}], "crp": [{"d": "2026-06-01", "v": "7,2"}], "hb": [{"d": "2026-06-01", "v": "127"}]};
+var hist=JSON.parse(JSON.stringify(HIST_SEED)), lastCommit=null;
+var state={date:'',rows:{},savedAt:null};
+var rowEls={};
+
+function num(v){ if(v===null||v===undefined||v==='') return NaN; return parseFloat(String(v).replace(',','.')); }
+function money(n){ return Math.round(n).toLocaleString('ru-RU'); }
+function fmtN(n){ return String(n).replace('.',','); }
+function el(tag,cls,html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!==undefined) e.innerHTML=html; return e; }
+
+// ---------- зачем этот анализ ----------
+var WHY={
+ hb:'Был 127 г/л — норма. Нужен, чтобы увидеть, не перешёл ли скрытый дефицит железа в анемию: длинные месячные и перерыв в приёме железа к этому подталкивают. Общий анализ также покажет, ушла ли послевирусная картина июня.',
+ ferritin:'Запас железа. Был 14 при норме от 15, а на фоне СРБ 7,2 настоящий запас, скорее всего, ещё ниже. Главный подозреваемый в усталости и выпадении волос: для роста волос ориентир 40–70.',
+ iron:'Железо в крови в момент сдачи. Само по себе сильно колеблется, но вместе с ферритином и трансферрином показывает, где проблема: в запасах или в доставке.',
+ tibc:'Сколько железа кровь способна связать. При дефиците растёт. Эстроген в КОК тоже её повышает, поэтому оценивается только вместе с ферритином.',
+ transferrin:'Белок, который переносит железо. При дефиците растёт. Эстроген в КОК тоже его повышает.',
+ tsat:'Доля трансферрина, загруженного железом. Ниже 20% — железа не хватает для кроветворения, даже если гемоглобин пока в норме.',
+ crp:'Маркер воспаления. Был 7,2 через 5 дней после эпизода с температурой. Нужен, чтобы правильно прочитать ферритин: при воспалении он завышен. Эстроген КОК может немного повышать СРБ.',
+ tsh:'Главный регулятор щитовидной железы. Был 1,95 — норма. Для планирования беременности желательно не выше 2,5.',
+ ft4:'Сухость кожи, запоры, отёчность, сонливость и тяжёлое пробуждение — типичная картина сниженной функции щитовидки. При нормальном ТТГ свободный Т4 может оказаться на нижней границе.',
+ ft3:'Активная форма гормона щитовидки. Дополняет Т4, если ТТГ и Т4 на границе нормы.',
+ atpo:'Антитела к щитовидке. Аутоиммунный тиреоидит у молодых женщин — частая скрытая причина усталости, сухости кожи и выпадения волос, задолго до того, как изменится ТТГ. Важен и для беременности.',
+ attg:'Второй тип антител к щитовидке. Сдают вместе с АТ-ТПО, чтобы полностью исключить аутоиммунный тиреоидит.',
+ vitd:'Был 34 нг/мл — нижняя граница. Осень, мало солнца, D3 сейчас в поддерживающей дозе. Влияет на энергию, кожу, волосы и настроение. Цель 50–60. КОК может немного завышать результат.',
+ b12:'Нехватка B12 даёт усталость, выпадение волос и анемию. Активный B12 точнее обычного: показывает то, что реально доступно клеткам.',
+ folate:'Нужны для кроветворения и обязательно — до беременности. КОК может снижать фолаты.',
+ zinc:'Цинк нужен для роста волос и заживления кожи, его нехватка связана с акне. КОК может немного его снижать.',
+ selenium:'Нужен щитовидной железе и защищает её от аутоиммунного воспаления. Нехватка добавляется к выпадению волос.',
+ omega3:'Доля омега-3 в оболочках эритроцитов. Нехватка связана с сухостью кожи и воспалением. Показывает, нужна ли добавка и в какой дозе.',
+ glucose:'Сахар натощак. Нужен для расчёта HOMA-IR. При СПКЯ и питании со сладким важно исключить нарушение обмена углеводов.',
+ insulin:'При СПКЯ часто бывает инсулинорезистентность. Лишний инсулин усиливает андрогены (акне, волосы) и даёт провалы энергии после еды.',
+ homa:'Индекс инсулинорезистентности, считается сам из глюкозы и инсулина. Выше 2,7 — инсулинорезистентность.',
+ hba1c:'Средний сахар за 3 месяца. Дополняет разовый анализ глюкозы.',
+ dht:'Самый сильный андроген для волосяных луковиц: при избытке истончает волосы на макушке и проборе. Назначен врачом. На Мидиане занижен.',
+ freetesto:'Активная часть тестостерона, связана с акне и выпадением волос при СПКЯ. Назначен врачом. На КОК занижен.',
+ ohp17:'Помогает отличить СПКЯ от врождённой дисфункции надпочечников, которая даёт похожие симптомы. Назначен врачом. Зависит от фазы цикла, на КОК занижен.',
+ prolactin:'Был 626 при норме до 557. На КОК часто выше и без болезни. Высокий пролактин может давать выпадение волос и акне. Сдавать утром, спокойно, через час после пробуждения.',
+ macroprl:'Показывает, какая часть пролактина — неактивная крупная форма. Если её много, повышенный пролактин не требует лечения.',
+ testo:'Общий тестостерон. Вместе с ГСПГ даёт индекс свободных андрогенов — главный лабораторный признак СПКЯ. На КОК занижен.',
+ shbg:'Белок, связывающий андрогены. На КОК он сильно повышен, и без него нельзя правильно прочитать тестостерон.',
+ dheas:'Андрогены надпочечников. Повышаются при стрессе и иногда при СПКЯ, могут усиливать акне.',
+ androst:'Ещё один андроген, часто повышенный при СПКЯ. Дополняет тестостерон в оценке акне и волос.'
+};
+
+
+function shortD(d){ return d? d.slice(8,10)+'.'+d.slice(5,7)+'.'+d.slice(2,4):''; }
+function lastOf(key){ var a=hist[key]; return a&&a.length? a[a.length-1] : null; }
+function renderPrev(key){
+  var R=rowEls[key]; if(!R) return; var td=R.tr.querySelector('td.prev'); var L=lastOf(key);
+  td.innerHTML='';
+  if(!L){ td.innerHTML='<span class="nd">—</span>'; return; }
+  var v=el('span'); v.textContent=L.v; if(R.def[11]==='q') v.className='nd'; td.appendChild(v);
+  var d=el('span','pd'); d.textContent=shortD(L.d); td.appendChild(d);
+}
+function sparkSVG(key,cur){
+  var pts=(hist[key]||[]).map(function(x){return num(x.v);}).filter(function(x){return !isNaN(x);});
+  if(!isNaN(cur)) pts=pts.concat([cur]);
+  if(pts.length<2) return null;
+  var W=96,H=24,p=3, mn=Math.min.apply(null,pts), mx=Math.max.apply(null,pts); if(mx===mn){mx+=1;mn-=1;}
+  var xs=function(i){return p+i*(W-2*p)/(pts.length-1);}, ys=function(v){return H-p-(v-mn)*(H-2*p)/(mx-mn);};
+  var d=pts.map(function(v,i){return (i?'L':'M')+xs(i).toFixed(1)+' '+ys(v).toFixed(1);}).join(' ');
+  var last=pts.length-1, curCol=!isNaN(cur)?'var(--coral)':'var(--ink-soft)';
+  var svg='<svg class="spark" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" aria-hidden="true"><path d="'+d+'" fill="none" stroke="var(--ink-soft)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>'+
+    pts.map(function(v,i){return '<circle cx="'+xs(i).toFixed(1)+'" cy="'+ys(v).toFixed(1)+'" r="'+(i===last?2.8:1.8)+'" fill="'+(i===last?curCol:'var(--ink-soft)')+'"/>';}).join('')+'</svg>';
+  return svg;
+}
+// ---------- build ----------
+var main=document.getElementById('main'), total=0, customs=[];
+function makeRow(r,b,tb){
+  var key=r[0], calc=(r[11]==='c'), q=(r[11]==='q'), custom=!!r[13]; var tr=el('tr'); tr.dataset.key=key;
+  if(r[9]) tr.classList.add('doc'); if(custom) tr.classList.add('custom');
+  var chk=el('td','chk');
+  if(calc){ chk.innerHTML='<span class="calc">расчёт</span>'; }
+  else { var cb=el('input','cbx'); cb.type='checkbox'; cb.id='cb-'+key; cb.setAttribute('aria-label','Сдаю: '+r[1]); chk.appendChild(cb); }
+  tr.appendChild(chk);
+  var nm=el('td','name');
+  var an=el('span','aname'); an.textContent=r[1]; an.tabIndex=0; an.dataset.tip=key; nm.appendChild(an);
+  var ib=el('span','why-i','i'); ib.setAttribute('aria-hidden','true'); an.appendChild(ib);
+  nm.appendChild(document.createTextNode(' ')); var un=el('span','unit'); un.textContent=r[2]; nm.appendChild(un);
+  if(r[9]) nm.appendChild(el('span','docmark','врач'));
+  if(custom){ var del=el('button','delrow','×'); del.type='button'; del.title='Удалить анализ'; del.setAttribute('aria-label','Удалить '+r[1]); del.dataset.del=key; nm.appendChild(del); }
+  tr.appendChild(nm);
+  var rf=el('td','ref'); if(custom) rf.textContent=r[3]; else rf.innerHTML=q?'<b>'+r[3]+'</b>':r[3]; tr.appendChild(rf);
+  tr.appendChild(el('td','prev'));
+  var nv=el('td','newv'); var inp=el('input'); inp.type='text'; inp.inputMode=q?'text':'decimal'; inp.id='v-'+key; inp.setAttribute('aria-label','Новый результат: '+r[1]);
+  if(q) inp.placeholder='отр / пол';
+  if(calc){ inp.readOnly=true; inp.placeholder='авто'; }
+  nv.appendChild(inp); tr.appendChild(nv);
+  tr.appendChild(el('td','brk'));
+  LABS.forEach(function(l,i){
+    var td=el('td','price h-'+l);
+    if(!r[10]) td.innerHTML='<span class="dash">—</span>';
+    else { var pi=el('input'); pi.type='text'; pi.inputMode='numeric'; pi.id='p-'+l+'-'+key; pi.value=String(r[10][i]); pi.dataset.def=String(r[10][i]); pi.setAttribute('aria-label','Цена '+LABN[l]+': '+r[1]); td.appendChild(pi); }
+    tr.appendChild(td);
+  });
+  tr.appendChild(el('td','dyn'));
+  tb.appendChild(tr);
+  rowEls[key]={tr:tr,def:r,block:b};
+}
+function countTotal(){ total=Object.keys(rowEls).filter(function(k){return rowEls[k].def[11]!=='c';}).length; document.getElementById('total').textContent=total; }
+BLOCKS.forEach(function(b){
+  var blk=el('section','block '+b.cls); blk.dataset.block=b.n;
+  var bh=el('button','bhead','<span class="n">'+b.n+'</span><span class="bt">'+b.title+'</span><span class="tag">'+b.tag+'</span><span class="chev" aria-hidden="true"></span>'); bh.type='button'; bh.dataset.toggle=b.n; bh.setAttribute('aria-expanded','true'); blk.appendChild(bh);
+  var t=el('table');
+  t.appendChild(el('thead','','<tr><th class="c-chk">Сдаю</th><th>Показатель</th><th class="c-ref">Норма / цель</th><th class="c-prev">Было</th><th class="c-new">Стало</th><th class="c-price h-helix"><span class="lab">Helix</span>₽</th><th class="c-price h-invitro"><span class="lab">Invitro</span>₽</th><th class="c-price h-gemotest"><span class="lab">Гемотест</span>₽</th><th class="c-dyn">Оценка</th></tr>'));
+  var tb=el('tbody'); b.tb=tb;
+  b.rows.forEach(function(r){ makeRow(r,b,tb); });
+  t.appendChild(tb);
+  var tf=el('tfoot');
+  var atr=el('tr'); var atd=el('td'); atd.colSpan=9;
+  var n=b.n;
+  atd.innerHTML='<button type="button" class="addbtn" data-add="'+n+'">+ Добавить анализ в блок</button>'+
+   '<div class="addform" id="af-'+n+'" hidden>'+
+   '<div class="af-grid">'+
+   '<label class="af-wide">Название<input id="af-name-'+n+'" type="text" placeholder="например, Селен"></label>'+
+   '<label>Единицы<input id="af-unit-'+n+'" type="text" placeholder="мкг/л"></label>'+
+   '<label>Норма от<input id="af-low-'+n+'" type="text" inputmode="decimal"></label>'+
+   '<label>Норма до<input id="af-high-'+n+'" type="text" inputmode="decimal"></label>'+
+   '<label>Helix ₽<input id="af-helix-'+n+'" type="text" inputmode="numeric"></label>'+
+   '<label>Invitro ₽<input id="af-invitro-'+n+'" type="text" inputmode="numeric"></label>'+
+   '<label>Гемотест ₽<input id="af-gemotest-'+n+'" type="text" inputmode="numeric"></label>'+
+   '<label class="af-wide">Зачем сдавать (для подсказки)<input id="af-why-'+n+'" type="text" placeholder="необязательно"></label>'+
+   '</div><div class="af-btns"><button type="button" class="save" data-addok="'+n+'">Добавить</button><button type="button" data-addcancel="'+n+'">Отмена</button><span class="af-err" id="af-err-'+n+'"></span></div></div>';
+  atr.appendChild(atd); tf.appendChild(atr);
+  var ftr=el('tr'); var ftd=el('td'); ftd.colSpan=9;
+  ftd.innerHTML='<div class="blocktotal"><span class="lbl">Итого по отмеченным</span><span class="pills">'+LABS.map(function(l){return '<span class="pill '+l+'"><span class="nm">'+LABN[l]+'</span><span class="sv"><span data-sum="'+l+'">0</span> ₽</span></span>';}).join('')+'</span></div>';
+  ftr.appendChild(ftd); tf.appendChild(ftr); t.appendChild(tf);
+  blk.appendChild(t); main.appendChild(blk);
+});
+function refText(lo,hi){ return (lo!==null&&hi!==null)?(fmtN(lo)+'–'+fmtN(hi)):(hi!==null?'< '+fmtN(hi):(lo!==null?'> '+fmtN(lo):'—')); }
+function addCustom(c){
+  var b=BLOCKS.filter(function(x){return x.n===c.block;})[0]; if(!b||rowEls[c.key]) return;
+  var lo=c.low===''||c.low==null?null:num(c.low), hi=c.high===''||c.high==null?null:num(c.high);
+  if(isNaN(lo)) lo=null; if(isNaN(hi)) hi=null;
+  var pr=LABS.map(function(l){ var v=num(c.prices&&c.prices[l]); return isNaN(v)?0:v; });
+  var r=[c.key,c.name,c.unit||'',refText(lo,hi),null,lo,hi,null,'neutral',0,pr,'n',c.why||'',true];
+  b.rows.push(r); makeRow(r,b,b.tb); customs.push(c);
+  if(c.why) WHY[c.key]=c.why;
+}
+function removeCustom(key){
+  var R=rowEls[key]; if(!R) return;
+  R.tr.remove(); var b=R.block; b.rows=b.rows.filter(function(r){return r[0]!==key;});
+  delete rowEls[key]; delete WHY[key]; customs=customs.filter(function(c){return c.key!==key;});
+}
+function clearCustoms(){ customs.slice().forEach(function(c){ removeCustom(c.key); }); customs=[]; }
+
+var info=el('section','info');
+info.innerHTML='<h3>Как подготовиться к сдаче</h3><ul>'+
+ '<li>Строго <b>натощак</b>, утром: 8–12 часов без еды, вода можно.</li>'+
+ '<li><b>Без кофе и чая</b> до сдачи.</li>'+
+ '<li>За <b>2–3 дня</b> не принимать биотин и B-комплексы: они искажают щитовидку и гормоны.</li>'+
+ '<li>Пролактин и андрогены сдавать утром, спокойно, без нагрузки и стресса накануне. Пролактин — не раньше чем через час после пробуждения.</li>'+
+ '<li>Кровь на железо сдать <b>до начала</b> препаратов железа.</li>'+
+ '<li>Не сдавать во время простуды: СРБ и железо будут недостоверны.</li></ul>'+
+ '<p style="margin:8px 0 0">Андрогены на фоне Мидианы обычно ниже, чем без неё. «В норме» для них означает «в норме на КОК». Окончательно их оценивает врач.</p>';
+main.appendChild(info);
+countTotal();
+
+// ---------- logic ----------
+function setCalc(){
+  var g=num(document.getElementById('v-glucose').value), ins=num(document.getElementById('v-insulin').value);
+  document.getElementById('v-homa').value=(!isNaN(g)&&!isNaN(ins)&&g>0&&ins>0)?fmtN((g*ins/22.5).toFixed(2)):'';
+  if(document.getElementById('v-nonhdl')){ var c=num(document.getElementById('v-chol').value), h=num(document.getElementById('v-hdl').value);
+  document.getElementById('v-nonhdl').value=(!isNaN(c)&&!isNaN(h))?fmtN((c-h).toFixed(2)):''; }
+}
+function qStatus(s){
+  s=String(s||'').trim().toLowerCase(); if(!s) return null;
+  if(/^(отр|нет|не\s*обн|neg|роста\s*нет|нет\s*роста|-)/.test(s)) return 'neg';
+  return 'pos';
+}
+function statusOf(d,vs){
+  if(d[11]==='q'){ return qStatus(vs); }
+  var v=num(vs); if(isNaN(v)) return null;
+  if(d[5]!==null&&v<d[5]) return 'low'; if(d[6]!==null&&v>d[6]) return 'high';
+  if(d[7]!==null&&d[8]==='up'&&v<d[7]) return 'under';
+  if(d[7]!==null&&d[8]==='down'&&v>d[7]) return 'over';
+  return 'ok';
+}
+var TXT={ok:'в норме',under:'норма, ниже цели',over:'норма, выше цели',low:'ниже нормы',high:'выше нормы',neg:'отрицательно',pos:'обнаружено'};
+var CLS={ok:'ok',under:'under',over:'under',low:'low',high:'high',neg:'neg',pos:'pos'};
+function evalRow(key){
+  var R=rowEls[key]; if(!R) return; var d=R.def, cell=R.tr.querySelector('td.dyn'), inp=document.getElementById('v-'+key);
+  renderPrev(key);
+  cell.innerHTML=''; inp.className='';
+  var st=statusOf(d,inp.value), v=num(inp.value);
+  if(st){
+    inp.classList.add('st-'+CLS[st]);
+    cell.appendChild(el('span','badge b-'+CLS[st],TXT[st]));
+    var L=lastOf(key), prev=L?num(L.v):(typeof d[4]==='number'?d[4]:NaN);
+    if(d[11]!=='q' && !isNaN(prev) && !isNaN(v)){
+      var df=v-prev, dd=el('span','delta'), dir=d[8], ad=Math.abs(df);
+      dd.textContent=(df>0?'▲ +':(df<0?'▼ −':'= '))+fmtN(ad>=1?ad.toFixed(1):ad.toFixed(2))+(L?' к '+shortD(L.d):'');
+      dd.classList.add(df===0||dir==='neutral'?'neutral':((dir==='up')===(df>0)?'good':'bad'));
+      cell.appendChild(dd);
+    }
+  }
+  if(d[11]!=='q'){ var s=sparkSVG(key, st?v:NaN); if(s) cell.insertAdjacentHTML('beforeend',s); }
+}
+function recalc(){
+  var g={helix:0,invitro:0,gemotest:0}, cnt=0;
+  document.querySelectorAll('.block').forEach(function(blk){
+    var s={helix:0,invitro:0,gemotest:0};
+    blk.querySelectorAll('tbody tr').forEach(function(tr){
+      var key=tr.dataset.key, cb=document.getElementById('cb-'+key);
+      tr.classList.toggle('done',!!(cb&&cb.checked));
+      if(!cb||!cb.checked) return;
+      cnt++;
+      LABS.forEach(function(l){ var p=document.getElementById('p-'+l+'-'+key); var n=p?num(p.value):0; if(isNaN(n)) n=0; s[l]+=n; g[l]+=n; });
+    });
+    LABS.forEach(function(l){ blk.querySelector('[data-sum='+l+']').textContent=money(s[l]); });
+  });
+  var min=Infinity,max=-Infinity,minL=null;
+  LABS.forEach(function(l){ if(g[l]<min){min=g[l];minL=l;} if(g[l]>max) max=g[l]; });
+  document.getElementById('done').textContent=cnt;
+  LABS.forEach(function(l){ var e=document.getElementById('sb-'+l); e.textContent=money(g[l]); e.parentNode.classList.toggle('best', cnt>0 && l===minL && max>min); });
+  document.getElementById('barfill').style.width=total?Math.round(cnt/total*100)+'%':'0%';
+  return;
+}
+
+// ---------- state ----------
+function collect(){
+  var s={date:document.getElementById('newdate').value||'',rows:{},custom:customs.slice(),hist:hist,lastCommit:lastCommit,savedAt:state.savedAt};
+  Object.keys(rowEls).forEach(function(key){
+    if(rowEls[key].def[11]==='c') return;
+    var cb=document.getElementById('cb-'+key), r={v:document.getElementById('v-'+key).value,done:!!(cb&&cb.checked),p:{}};
+    LABS.forEach(function(l){ var p=document.getElementById('p-'+l+'-'+key); if(p&&p.value!==p.dataset.def) r.p[l]=p.value; });
+    s.rows[key]=r;
+  });
+  return s;
+}
+function apply(s){
+  if(!s||!s.rows) return;
+  if(s.hist){ hist=s.hist; Object.keys(HIST_SEED).forEach(function(k){ if(!hist[k]) hist[k]=HIST_SEED[k]; }); }
+  lastCommit=s.lastCommit||null;
+  clearCustoms(); (s.custom||[]).forEach(addCustom); countTotal();
+  document.getElementById('newdate').value=s.date||'';
+  Object.keys(rowEls).forEach(function(key){
+    if(rowEls[key].def[11]==='c') return;
+    var r=s.rows[key]||{}, cb=document.getElementById('cb-'+key);
+    if(cb) cb.checked=!!r.done;
+    document.getElementById('v-'+key).value=r.v||'';
+    LABS.forEach(function(l){ var p=document.getElementById('p-'+l+'-'+key); if(p) p.value=(r.p&&r.p[l]!==undefined)?r.p[l]:p.dataset.def; });
+  });
+  state.savedAt=s.savedAt||null;
+  refreshAll();
+}
+function refreshAll(){ setCalc(); Object.keys(rowEls).forEach(evalRow); recalc(); }
+
+var statusEl=document.getElementById('status');
+function fmtTime(ts){ try{ return new Date(ts).toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }catch(e){ return ''; } }
+function setStatus(t){ statusEl.textContent=t; }
+
+var docRef=null, dbWritable=true, writing=false, pending=null;
+function writeLocal(s){ try{ localStorage.setItem(STORE,JSON.stringify(s)); return true; }catch(e){ return false; } }
+function readLocal(){ try{ var t=localStorage.getItem(STORE); return t?JSON.parse(t):null; }catch(e){ return null; } }
+function writeCloud(s){
+  if(!docRef||!dbWritable) return Promise.resolve(false);
+  if(writing){ pending=s; return Promise.resolve(true); }
+  writing=true;
+  return docRef.set(s).then(function(){ return true; }, function(e){ if(e&&e.code==='invalid_argument') dbWritable=false; return false; })
+    .then(function(ok){ writing=false; if(pending){ var p=pending; pending=null; return writeCloud(p); } return ok; });
+}
+function persist(explicit){
+  var s=collect(); s.savedAt=Date.now(); state.savedAt=s.savedAt;
+  var local=writeLocal(s);
+  writeCloud(s).then(function(cloud){
+    if(!explicit && !cloud && local){ setStatus('Сохранено на этом устройстве · '+fmtTime(s.savedAt)); return; }
+    if(local) setStatus('Сохранено на этом устройстве · '+fmtTime(s.savedAt));
+    else setStatus('Браузер не даёт сохранять. Открой страницу в Safari или Chrome, не в приватном режиме.');
+  });
+}
+var timer=null;
+function autosave(){ clearTimeout(timer); timer=setTimeout(function(){ persist(false); },700); }
+
+// ---------- events ----------
+main.addEventListener('input',function(e){
+  var t=e.target; if(!t.id) return;
+  if(t.id.indexOf('v-')===0){
+    var key=t.id.slice(2);
+    if(key==='glucose'||key==='insulin'||key==='chol'||key==='hdl'){ setCalc(); evalRow('homa'); if(rowEls.nonhdl) evalRow('nonhdl'); }
+    evalRow(key); autosave();
+  } else if(t.id.indexOf('p-')===0){ recalc(); autosave(); }
+});
+
+main.addEventListener('click',function(e){
+  var t=e.target, n;
+  if(t.dataset.add){ n=t.dataset.add; document.getElementById('af-'+n).hidden=false; t.hidden=true; document.getElementById('af-name-'+n).focus(); return; }
+  if(t.dataset.addcancel){ n=t.dataset.addcancel; document.getElementById('af-'+n).hidden=true; main.querySelector('[data-add="'+n+'"]').hidden=false; return; }
+  if(t.dataset.addok){
+    n=t.dataset.addok; var g=function(f){return document.getElementById('af-'+f+'-'+n).value.trim();};
+    var err=document.getElementById('af-err-'+n);
+    if(!g('name')){ err.textContent='Впиши название анализа'; return; }
+    var lo=g('low'), hi=g('high');
+    if((lo&&isNaN(num(lo)))||(hi&&isNaN(num(hi)))){ err.textContent='Норма — только числа'; return; }
+    err.textContent='';
+    var c={key:'x'+Date.now().toString(36),block:+n,name:g('name'),unit:g('unit'),low:lo,high:hi,prices:{helix:g('helix'),invitro:g('invitro'),gemotest:g('gemotest')},why:g('why')};
+    addCustom(c); countTotal();
+    var cb=document.getElementById('cb-'+c.key); if(cb) cb.checked=true;
+    ['name','unit','low','high','helix','invitro','gemotest','why'].forEach(function(f){ document.getElementById('af-'+f+'-'+n).value=''; });
+    document.getElementById('af-'+n).hidden=true; main.querySelector('[data-add="'+n+'"]').hidden=false;
+    recalc(); persist(true); var am='Анализ «'+c.name+'» добавлен'; setTimeout(function(){ setStatus(am); },60);
+    return;
+  }
+  if(t.dataset.del){
+    var k=t.dataset.del;
+    if(t.dataset.armed!=='1'){ t.dataset.armed='1'; t.textContent='удалить?'; t.classList.add('armed'); setTimeout(function(){ if(t.isConnected){ t.dataset.armed=''; t.textContent='×'; t.classList.remove('armed'); } },3000); return; }
+    removeCustom(k); countTotal(); recalc(); hideTip(); persist(true); setStatus('Анализ удалён');
+  }
+});
+
+
+
+// ---------- свернуть / развернуть разделы ----------
+var CKEY='lera_labs_collapsed_v1';
+function readCol(){ try{ return JSON.parse(localStorage.getItem(CKEY)||'[]'); }catch(e){ return []; } }
+function writeCol(){ try{ localStorage.setItem(CKEY, JSON.stringify([].slice.call(document.querySelectorAll('.block.collapsed')).map(function(b){return b.dataset.block;}))); }catch(e){} }
+function setCol(blk,on){ blk.classList.toggle('collapsed',on); var bh=blk.querySelector('.bhead'); if(bh) bh.setAttribute('aria-expanded',String(!on)); }
+readCol().forEach(function(n){ var b=main.querySelector('.block[data-block="'+n+'"]'); if(b) setCol(b,true); });
+main.addEventListener('click',function(e){ var bh=e.target.closest('.bhead'); if(!bh) return; var blk=bh.closest('.block'); setCol(blk,!blk.classList.contains('collapsed')); writeCol(); });
+document.getElementById('btnFold').addEventListener('click',function(){ var all=document.querySelectorAll('.block'), anyOpen=[].some.call(all,function(b){return !b.classList.contains('collapsed');}); [].forEach.call(all,function(b){ setCol(b,anyOpen); }); writeCol(); });
+
+
+// ---------- подгонка верхней строки в одну линию ----------
+(function(){ var k=document.querySelector('.toprow .kicker'); if(!k) return;
+  function fit(){ var s=12; k.style.fontSize=s+'px'; while(k.scrollWidth>k.clientWidth+1 && s>8.5){ s-=0.5; k.style.fontSize=s+'px'; } }
+  fit(); window.addEventListener('resize',fit); if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fit); })();
+
+// ---------- меню «Ещё» ----------
+var menu=document.getElementById('menu'), btnMore=document.getElementById('btnMore');
+btnMore.addEventListener('click',function(e){ e.stopPropagation(); menu.hidden=!menu.hidden; btnMore.setAttribute('aria-expanded',String(!menu.hidden));
+  if(!menu.hidden){ menu.style.left='auto'; menu.style.right='0'; var r=menu.getBoundingClientRect(); if(r.left<8){ menu.style.right='auto'; menu.style.left=(8-btnMore.getBoundingClientRect().left)+'px'; } } });
+document.addEventListener('click',function(e){ if(!menu.hidden && !e.target.closest('.more')){ menu.hidden=true; btnMore.setAttribute('aria-expanded','false'); } });
+menu.addEventListener('click',function(e){ if(e.target.tagName==='BUTTON' && e.target.id!=='btnReset'){ menu.hidden=true; btnMore.setAttribute('aria-expanded','false'); } });
+
+// ---------- перенос в историю ----------
+var commitBtn=document.getElementById('btnCommit'), cArmed=null;
+function pendingKeys(){ return Object.keys(rowEls).filter(function(k){ var d=rowEls[k].def; if(d[11]==='c') return false; return document.getElementById('v-'+k).value.trim()!==''; }); }
+commitBtn.addEventListener('click',function(){
+  var date=document.getElementById('newdate').value;
+  var ks=pendingKeys();
+  if(!date){ setStatus('Сначала укажи дату новых анализов.'); document.getElementById('newdate').focus(); return; }
+  if(!ks.length){ setStatus('Нет введённых результатов для переноса.'); return; }
+  if(!cArmed){ commitBtn.textContent='Перенести '+ks.length+'?'; commitBtn.classList.add('danger'); cArmed=setTimeout(function(){ cArmed=null; commitBtn.textContent='В историю'; commitBtn.classList.remove('danger'); },4000); return; }
+  clearTimeout(cArmed); cArmed=null; commitBtn.textContent='В историю'; commitBtn.classList.remove('danger');
+  // расчётные показатели тоже в историю
+  ['homa','nonhdl'].forEach(function(k){ var e=document.getElementById('v-'+k); if(e&&e.value) ks.push(k); });
+  var undo={date:date,items:[]};
+  ks.forEach(function(k){
+    var v=document.getElementById('v-'+k).value.trim(), cb=document.getElementById('cb-'+k);
+    var arr=hist[k]=(hist[k]||[]).slice(); var i=arr.findIndex(function(x){return x.d===date;});
+    undo.items.push({k:k,v:v,done:!!(cb&&cb.checked),replaced:i>=0?arr[i]:null});
+    if(i>=0) arr[i]={d:date,v:v}; else arr.push({d:date,v:v});
+    arr.sort(function(a,b){return a.d<b.d?-1:1;});
+    if(rowEls[k].def[11]!=='c') document.getElementById('v-'+k).value='';
+    if(cb) cb.checked=false;
+  });
+  lastCommit=undo; document.getElementById('newdate').value='';
+  refreshAll(); persist(true); var msg='Перенесено в историю: '+undo.items.length+' значений с датой '+shortD(date)+'. Поля очищены для следующего раза.'; setTimeout(function(){ setStatus(msg); },60);
+});
+document.getElementById('btnUndo').addEventListener('click',function(){
+  if(!lastCommit){ setStatus('Отменять нечего.'); return; }
+  var u=lastCommit;
+  u.items.forEach(function(it){
+    var arr=(hist[it.k]||[]).filter(function(x){return x.d!==u.date;});
+    if(it.replaced) arr.push(it.replaced); arr.sort(function(a,b){return a.d<b.d?-1:1;}); hist[it.k]=arr;
+    if(rowEls[it.k] && rowEls[it.k].def[11]!=='c'){ document.getElementById('v-'+it.k).value=it.v; var cb=document.getElementById('cb-'+it.k); if(cb) cb.checked=it.done; }
+  });
+  document.getElementById('newdate').value=u.date; lastCommit=null;
+  refreshAll(); persist(true); setTimeout(function(){ setStatus('Перенос отменён: значения вернулись в поля.'); },60);
+});
+
+// ---------- подсказки «зачем» ----------
+var tip=el('div','tipbox'); tip.setAttribute('role','tooltip'); tip.hidden=true; document.body.appendChild(tip);
+var tipFor=null, tipAt=0;
+function showTip(a){
+  var k=a.dataset.tip, txt=WHY[k];
+  var R=rowEls[k];
+  tip.innerHTML=''; var h=el('div','tip-h'); h.textContent='Зачем: '+(R?R.def[1]:''); tip.appendChild(h);
+  var p=el('div','tip-b'); p.textContent=txt||'Пояснение не добавлено.'; tip.appendChild(p);
+  var H=hist[k]; if(H&&H.length){ var hh=el('div','tip-hist'); var hb=el('b'); hb.textContent='История'; hh.appendChild(hb); H.slice().reverse().forEach(function(x){ var sp=el('span'); sp.textContent=shortD(x.d)+' — '+x.v; hh.appendChild(sp); }); tip.appendChild(hh); }
+  tip.hidden=false; tipFor=a; tipAt=Date.now();
+  var r=a.getBoundingClientRect(), vw=document.documentElement.clientWidth, vh=window.innerHeight;
+  var w=Math.min(340, vw-24); tip.style.width=w+'px';
+  var left=Math.min(Math.max(12, r.left), vw-w-12);
+  var top=r.bottom+8; var th=tip.offsetHeight;
+  if(top+th>vh-8 && r.top-th-8>8) top=r.top-th-8;
+  tip.style.left=left+'px'; tip.style.top=top+'px';
+}
+function hideTip(){ tip.hidden=true; tipFor=null; }
+var lastPT='mouse';
+document.addEventListener('pointerdown',function(e){ lastPT=e.pointerType||'mouse'; },true);
+main.addEventListener('pointerover',function(e){ if(e.pointerType!=='mouse') return; var a=e.target.closest('.aname'); if(a&&a!==tipFor) showTip(a); });
+main.addEventListener('pointerout',function(e){ if(e.pointerType!=='mouse') return; var a=e.target.closest('.aname'); if(a&&!a.contains(e.relatedTarget)) hideTip(); });
+main.addEventListener('focusin',function(e){ if(e.target.classList.contains('aname') && e.target.matches(':focus-visible')) showTip(e.target); });
+main.addEventListener('focusout',function(e){ if(e.target.classList.contains('aname') && lastPT==='mouse') hideTip(); });
+document.addEventListener('click',function(e){ var a=e.target.closest('.aname'); if(a){ if(lastPT==='mouse'){ if(tipFor!==a) showTip(a); } else { if(tipFor===a) hideTip(); else showTip(a); } } else if(!e.target.closest('.tipbox')) hideTip(); });
+window.addEventListener('scroll',hideTip,{passive:true});
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') hideTip(); });
+main.addEventListener('change',function(e){ if(e.target.classList.contains('cbx')){ recalc(); autosave(); } });
+document.getElementById('newdate').addEventListener('change',autosave);
+
+document.getElementById('btnAll').addEventListener('click',function(){
+  Object.keys(rowEls).forEach(function(k){ var d=rowEls[k].def, cb=document.getElementById('cb-'+k); if(cb&&d[9]) cb.checked=true; });
+  recalc(); persist(true);
+});
+var resetBtn=document.getElementById('btnReset'), armed=null;
+resetBtn.addEventListener('click',function(){
+  if(!armed){ resetBtn.textContent='Точно очистить?'; resetBtn.classList.add('danger'); armed=setTimeout(function(){ armed=null; resetBtn.textContent='Очистить'; resetBtn.classList.remove('danger'); },4000); return; }
+  clearTimeout(armed); armed=null; resetBtn.textContent='Очистить'; resetBtn.classList.remove('danger');
+  var keep=collect(); Object.keys(keep.rows).forEach(function(k){ keep.rows[k].v=''; keep.rows[k].done=false; }); keep.date=''; apply(keep); persist(true); setStatus('Текущие отметки и значения очищены. История и цены сохранены.');
+});
+
+// ---------- отчёт для скачивания (без скриптов) ----------
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+var STC={ok:['#E2F0E6','#3F7D53'],neg:['#E2F0E6','#3F7D53'],under:['#F8ECD4','#A8721A'],over:['#F8ECD4','#A8721A'],low:['#F8ECD4','#A8721A'],high:['#FBE4DE','#C0492F'],pos:['#FBE4DE','#C0492F']};
+function buildReport(){
+  var dt=document.getElementById('newdate').value, g={helix:0,invitro:0,gemotest:0}, cnt=0, body='';
+  BLOCKS.forEach(function(b){
+    var s={helix:0,invitro:0,gemotest:0}, rows='';
+    b.rows.forEach(function(r){
+      var key=r[0], cb=document.getElementById('cb-'+key), on=!!(cb&&cb.checked), vs=document.getElementById('v-'+key).value, st=statusOf(r,vs);
+      var pr=LABS.map(function(l){ var p=document.getElementById('p-'+l+'-'+key); if(!p) return '—'; var n=num(p.value); if(isNaN(n)) n=0; if(on){s[l]+=n;g[l]+=n;} return money(n); });
+      if(on) cnt++;
+      var v=num(vs), delta='', LL=lastOf(key), pvn=LL?num(LL.v):NaN; if(r[11]!=='q'&&!isNaN(v)&&!isNaN(pvn)){ var df=v-pvn; delta=' <span style="color:#6B6058">('+(df>0?'+':'')+fmtN(Math.abs(df)>=1?df.toFixed(1):df.toFixed(2))+')</span>'; }
+      rows+='<tr'+(r[9]?' style="background:#FBEAE4"':'')+'><td style="text-align:center;font-size:16px">'+(r[11]==='c'?'·':(on?'✓':'☐'))+'</td>'+
+        '<td><b>'+esc(r[1])+'</b> <span style="color:#6B6058;font-size:11px">'+esc(r[2])+'</span></td>'+
+        '<td style="font-size:11px;color:#6B6058">'+(r[13]?esc(r[3]):r[3])+'</td><td style="text-align:center">'+(lastOf(key)?esc(lastOf(key).v)+'<br><span style="font-size:10px;color:#6B6058">'+shortD(lastOf(key).d)+'</span>':'—')+'</td>'+
+        '<td style="text-align:center;font-weight:700'+(st?';background:'+STC[st][0]+';color:'+STC[st][1]:'')+'">'+(vs?esc(vs)+delta:'')+'</td>'+
+        '<td style="font-size:11px;font-weight:700'+(st?';color:'+STC[st][1]:'')+'">'+(st?TXT[st]:'')+'</td>'+
+        pr.map(function(x){return '<td style="text-align:right">'+x+'</td>';}).join('')+'</tr>';
+    });
+    body+='<h2 style="font-size:15px;margin:22px 0 6px">'+b.n+'. '+b.title+'</h2><table><tr><th>Сдаю</th><th>Показатель</th><th>Норма</th><th>Было</th><th>Стало</th><th>Оценка</th><th>Helix ₽</th><th>Invitro ₽</th><th>Гемотест ₽</th></tr>'+rows+
+      '<tr style="background:#FCF9F4;font-weight:700"><td colspan="6" style="text-align:right">Итого по отмеченным</td><td style="text-align:right">'+money(s.helix)+'</td><td style="text-align:right">'+money(s.invitro)+'</td><td style="text-align:right">'+money(s.gemotest)+'</td></tr></table>';
+  });
+  var minL=LABS.reduce(function(a,l){return g[l]<g[a]?l:a;},'helix');
+  var head='<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Анализы Валерии'+(dt?' '+dt:'')+'</title><style>'+
+    'body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;color:#3A332D;background:#fff;margin:0;padding:16px;line-height:1.4}'+
+    'h1{font-size:22px;margin:0 0 4px}.wrapt{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:640px;font-size:12.5px}th,td{border:1px solid #E5DBCE;padding:5px 6px;vertical-align:middle}th{background:#F7F4EF;font-size:10px;text-transform:uppercase;text-align:left}'+
+    '.tot{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.tot div{flex:1;min-width:150px;border:1px solid #E5DBCE;border-radius:10px;padding:10px 12px}.tot b{display:block;font-size:22px}</style></head><body>'+
+    '<h1>Анализы: энергия и волосы</h1><div style="color:#6B6058;font-size:13px">Валерия · прошлые анализы 24.12.2025'+(dt?' · новые '+esc(dt):'')+' · отчёт сформирован '+esc(fmtTime(Date.now()))+'</div>'+
+    '<div style="font-size:12px;margin-top:8px">☐ не отмечено · ✓ сдаю · <span style="background:#FBEAE4;padding:0 4px">розовая строка</span> назначил врач 13.10 · отмечено анализов: <b>'+cnt+'</b></div>';
+  var tot='<div class="tot">'+LABS.map(function(l){return '<div'+(cnt&&l===minL?' style="border-color:#2E7D8A;border-width:2px"':'')+'>'+LABN[l]+(cnt&&l===minL?' · дешевле':'')+'<b>'+money(g[l])+' ₽</b></div>';}).join('')+'</div>';
+  return head+'<div class="wrapt">'+body+'</div>'+tot+'<p style="font-size:11px;color:#6B6058;margin-top:18px">Нормы и цены ориентировочные; сверяй с бланком лаборатории. Не заменяет консультацию врача.</p></body></html>';
+}
+function saveFile(name,blob){
+  var f=null; try{ f=new File([blob],name,{type:blob.type}); }catch(e){}
+  if(f&&navigator.canShare&&navigator.canShare({files:[f]})){
+    return navigator.share({files:[f],title:name}).then(function(){return true;},function(){return false;});
+  }
+  var u=URL.createObjectURL(blob), a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(u); },4000); return Promise.resolve(true);
+}
+function stamp(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+document.getElementById('btnExport').addEventListener('click',function(){
+  persist(true);
+  var dt=document.getElementById('newdate').value||stamp();
+  saveFile('Анализы_Валерия_'+dt+'.html', new Blob([buildReport()],{type:'text/html'})).then(function(ok){ setStatus(ok?'Отчёт с результатами готов':'Отменено. Данные сохранены.'); });
+});
+document.getElementById('btnBackup').addEventListener('click',function(){
+  persist(true);
+  var s=collect(); s.savedAt=state.savedAt||Date.now(); s.app='lera-labs'; s.v=1;
+  saveFile('Анализы_Валерия_копия_'+stamp()+'.json', new Blob([JSON.stringify(s,null,1)],{type:'application/json'})).then(function(ok){ setStatus(ok?'Копия данных сохранена':'Отменено'); });
+});
+var fileIn=document.getElementById('fileRestore');
+document.getElementById('btnRestore').addEventListener('click',function(){ fileIn.value=''; fileIn.click(); });
+fileIn.addEventListener('change',function(){
+  var f=fileIn.files&&fileIn.files[0]; if(!f) return;
+  var rd=new FileReader();
+  rd.onload=function(){
+    try{ var s=JSON.parse(rd.result); if(!s||s.app!=='lera-labs'||!s.rows) throw 0; apply(s); persist(true); setStatus('Копия загружена · данные от '+fmtTime(s.savedAt)); }
+    catch(e){ setStatus('Это не файл копии этого приложения. Выбери файл «Анализы_Валерия_копия_….json».'); }
+  };
+  rd.readAsText(f);
+});
+
+// ---------- start ----------
+var local=readLocal();
+if(local) apply(local); else refreshAll();
+if(local&&local.savedAt) setStatus('Последнее сохранение · '+fmtTime(local.savedAt));
+try{ if(navigator.storage&&navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+if('serviceWorker' in navigator && location.protocol!=='file:'){
+  window.addEventListener('load',function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
+}
+})();
+</script>
+</body>
+</html>

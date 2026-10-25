@@ -1,0 +1,40 @@
+{
+ "name": "Здоровье Валерии",
+ "short_name": "Здоровье",
+ "description": "Дашборд здоровья и чек-лист анализов",
+ "lang": "ru",
+ "start_url": "./index.html",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#E9E1D6",
+ "theme_color": "#C0623B",
+ "icons": [
+  {
+   "src": "icons/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "icons/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "icons/icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Чек-лист анализов",
+   "url": "./analizy.html"
+  },
+  {
+   "name": "Дашборд здоровья",
+   "url": "./zdorovye.html"
+  }
+ ]
+}

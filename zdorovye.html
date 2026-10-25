@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#C0623B"><link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Здоровье"><meta name="apple-mobile-web-app-status-bar-style" content="default"><title>Здоровье Валерии</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+ --font-anthropic-sans:'Onest',-apple-system,'Segoe UI',Roboto,sans-serif; --font-anthropic-serif:'Playfair Display',Georgia,'Times New Roman',serif;
+ --cds-font-size-caption:12px; --cds-font-size-body:14px; --cds-font-size-heading:18px; --cds-font-size-title:30px; --cds-font-weight-medium:600;
+ --cds-gap-xs:4px; --cds-gap-sm:8px; --cds-gap-md:14px; --cds-gap-lg:20px; --cds-gap-xl:30px;
+ --cds-pad-xs:4px; --cds-pad-sm:8px; --cds-pad-md:12px; --cds-pad-lg:16px; --cds-radius:10px; --cds-dur-slow:.3s;
+ --color-bg:#F6F2EC; --color-panel:#FFFFFF; --color-fg:#2E2924; --color-fg-muted:#6E645B; --color-border-line:#E6DED3;
+ --color-ok:#2F7A4C; --color-warn:#A06A12; --color-bad:#BC3F27;
+ --cds-surface-popover:#FFFFFF; --cds-border:#E6DED3; --cds-shadow-popover:0 6px 20px rgba(0,0,0,.14); --cds-text-secondary:#6E645B;
+ --cds-chart-grid:#ECE6DD; --cds-chart-axis:#CFC6BA; --cds-chart-reference:#9C9286; --cds-chart-status-critical:#C8452B; --cds-chart-muted:#B9B0A5;
+ --s1:#2E7D8A; --s2:#C0623B; --s3:#7A5BA8; --s4:#5F8A6E; --s5:#CF9244; --s6:#9B4A66; --s7:#4C6FA8; --s8:#8A8A3C;
+ color-scheme:light;
+}
+@media (prefers-color-scheme: dark){ :root{
+ --color-bg:#171513; --color-panel:#221F1C; --color-fg:#EEE7DD; --color-fg-muted:#AFA59A; --color-border-line:#3A342E;
+ --color-ok:#7FC796; --color-warn:#E2B261; --color-bad:#EE7A60;
+ --cds-surface-popover:#2A2622; --cds-border:#3A342E; --cds-shadow-popover:0 6px 20px rgba(0,0,0,.5); --cds-text-secondary:#AFA59A;
+ --cds-chart-grid:#2E2925; --cds-chart-axis:#4A433C; --cds-chart-reference:#8C8278; --cds-chart-status-critical:#EE7A60; --cds-chart-muted:#6E655C;
+ --s1:#5DB3C0; --s2:#E38A63; --s3:#A592C0; --s4:#79A688; --s5:#D9A25A; --s6:#D07F9C; --s7:#7D9BD0; --s8:#B8B86A;
+ color-scheme:dark;
+}}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--color-bg);color:var(--color-fg);font-family:var(--font-anthropic-sans);font-size:14px;line-height:1.45;
+ padding:calc(18px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(48px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));}
+#dash-root{max-width:1160px;margin:0 auto;}
+.dash-skeleton:empty{display:block;min-height:1em;border-radius:6px;background:var(--color-border-line);}
+.top-nav{max-width:1160px;margin:0 auto 18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:13px;}
+.top-nav a{color:var(--color-fg-muted);text-decoration:none;}
+.top-nav a.btn{color:#C0623B;border:1.5px solid #C0623B;border-radius:9px;padding:8px 14px;font-weight:600;margin-left:auto;}
+.top-nav a.btn:hover{background:#C0623B;color:#fff;}
+.snap{max-width:1160px;margin:-8px auto 16px;font-size:12px;color:var(--color-fg-muted);}
+</style>
+<script src="assets/d3.min.js"></script>
+<script>window.__DASH_DATA__={"labs": [{"mid": "ferr", "group": "Железо и витамины", "metric": "Ферритин", "value": 14, "unit": "мкг/л", "ref": "15–204", "ref_low": 15, "ref_high": 204, "status": "ниже", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "vitd", "group": "Железо и витамины", "metric": "Витамин D (25-OH)", "value": 34, "unit": "нг/мл", "ref": "30–100", "ref_low": 30, "ref_high": 100, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "amh", "group": "Гормоны", "metric": "АМГ", "value": 6.68, "unit": "нг/мл", "ref": "0.07–7.35", "ref_low": 0.07, "ref_high": 7.35, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "prl", "group": "Гормоны", "metric": "Пролактин", "value": 626, "unit": "мМЕ/л", "ref": "109–557", "ref_low": 109, "ref_high": 557, "status": "выше", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "tsh", "group": "Гормоны", "metric": "ТТГ", "value": 1.95, "unit": "мМЕ/л", "ref": "0.4–4", "ref_low": 0.4, "ref_high": 4, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "crp", "group": "Воспаление", "metric": "С-реактивный белок", "value": 7.2, "unit": "мг/л", "ref": "< 5", "ref_low": null, "ref_high": 5, "status": "выше", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "hb", "group": "Клинический анализ крови", "metric": "Гемоглобин", "value": 12.7, "unit": "г/дл", "ref": "11.7–15.5", "ref_low": 11.7, "ref_high": 15.5, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "hct", "group": "Клинический анализ крови", "metric": "Гематокрит", "value": 39.0, "unit": "%", "ref": "35–45", "ref_low": 35, "ref_high": 45, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "rbc", "group": "Клинический анализ крови", "metric": "Эритроциты", "value": 4.53, "unit": "млн/мкл", "ref": "3.8–5.1", "ref_low": 3.8, "ref_high": 5.1, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "mcv", "group": "Клинический анализ крови", "metric": "MCV", "value": 86.2, "unit": "фл", "ref": "81–100", "ref_low": 81, "ref_high": 100, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "mch", "group": "Клинический анализ крови", "metric": "MCH", "value": 27.9, "unit": "пг", "ref": "27–34", "ref_low": 27, "ref_high": 34, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "rdw", "group": "Клинический анализ крови", "metric": "RDW", "value": 13.8, "unit": "%", "ref": "11.6–14.8", "ref_low": 11.6, "ref_high": 14.8, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "wbc", "group": "Клинический анализ крови", "metric": "Лейкоциты", "value": 5.48, "unit": "тыс/мкл", "ref": "4.5–11", "ref_low": 4.5, "ref_high": 11, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "neut_p", "group": "Клинический анализ крови", "metric": "Нейтрофилы, %", "value": 27.2, "unit": "%", "ref": "48–78", "ref_low": 48, "ref_high": 78, "status": "ниже", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "neut_a", "group": "Клинический анализ крови", "metric": "Нейтрофилы, абс.", "value": 1.5, "unit": "тыс/мкл", "ref": "1.56–6.13", "ref_low": 1.56, "ref_high": 6.13, "status": "ниже", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "lymph_p", "group": "Клинический анализ крови", "metric": "Лимфоциты, %", "value": 63.5, "unit": "%", "ref": "19–37", "ref_low": 19, "ref_high": 37, "status": "выше", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "plt", "group": "Клинический анализ крови", "metric": "Тромбоциты", "value": 358, "unit": "тыс/мкл", "ref": "150–400", "ref_low": 150, "ref_high": 400, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "esr", "group": "Клинический анализ крови", "metric": "СОЭ", "value": 4, "unit": "мм/ч", "ref": "< 20", "ref_low": null, "ref_high": 20, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "alt", "group": "Биохимия", "metric": "АЛТ", "value": 10, "unit": "Ед/л", "ref": "< 31", "ref_low": null, "ref_high": 31, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "ast", "group": "Биохимия", "metric": "АСТ", "value": 14, "unit": "Ед/л", "ref": "< 31", "ref_low": null, "ref_high": 31, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "bil", "group": "Биохимия", "metric": "Билирубин общий", "value": 3.0, "unit": "мкмоль/л", "ref": "3.4–20.5", "ref_low": 3.4, "ref_high": 20.5, "status": "ниже", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "creat", "group": "Биохимия", "metric": "Креатинин", "value": 57, "unit": "мкмоль/л", "ref": "49–90", "ref_low": 49, "ref_high": 90, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "pt", "group": "Коагулограмма", "metric": "Протромбиновое время", "value": 10.5, "unit": "сек", "ref": "10–13.2", "ref_low": 10, "ref_high": 13.2, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "ptq", "group": "Коагулограмма", "metric": "Протромбин по Квику", "value": 113, "unit": "%", "ref": "80–133", "ref_low": 80, "ref_high": 133, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "aptt", "group": "Коагулограмма", "metric": "АЧТВ", "value": 29.5, "unit": "сек", "ref": "25.4–36.9", "ref_low": 25.4, "ref_high": 36.9, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "fib", "group": "Коагулограмма", "metric": "Фибриноген", "value": 3.0, "unit": "г/л", "ref": "2–4", "ref_low": 2, "ref_high": 4, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "tt", "group": "Коагулограмма", "metric": "Тромбиновое время", "value": 13.1, "unit": "сек", "ref": "10.3–16.6", "ref_low": 10.3, "ref_high": 16.6, "status": "норма", "date": "2026-06-01", "lab": "Инвитро"}, {"mid": "hpv", "group": "ВПЧ", "metric": "ВПЧ высокого риска (0 — не обнаружен)", "value": 0, "unit": "lg/10⁵ кл.", "ref": "не обнаружено", "ref_low": null, "ref_high": 0, "status": "норма", "date": "2025-04-11", "lab": "Helix"}, {"mid": "hpv", "group": "ВПЧ", "metric": "ВПЧ высокого риска (0 — не обнаружен)", "value": 5.46, "unit": "lg/10⁵ кл.", "ref": "не обнаружено", "ref_low": null, "ref_high": 0, "status": "выше", "date": "2026-05-27", "lab": "Helix"}], "findings": [{"kind": "сильная", "title": "Печень и почки в норме", "area": "Биохимия", "evidence": "АЛТ 10, АСТ 14, креатинин 57 (01.06.2026)", "priority": "", "action": ""}, {"kind": "сильная", "title": "Свёртывание крови в норме", "area": "Коагулограмма", "evidence": "Протромбин, АЧТВ, фибриноген, тромбоциты в норме — проблем со свёртываемостью по анализам нет", "priority": "", "action": ""}, {"kind": "сильная", "title": "Анемии нет", "area": "Кровь", "evidence": "Гемоглобин 12,7, эритроциты 4,53 в норме — дефицит железа пока скрытый", "priority": "", "action": ""}, {"kind": "сильная", "title": "ТТГ в норме", "area": "Щитовидная железа", "evidence": "1,95 мМЕ/л, в том числе подходит для планирования беременности (≤2,5)", "priority": "", "action": ""}, {"kind": "сильная", "title": "Цитология шейки без изменений", "area": "Шейка матки", "evidence": "NILM дважды: 04.2025 и 05.2026", "priority": "", "action": ""}, {"kind": "сильная", "title": "ВПЧ 16 и 18 типов не найдены", "area": "ВПЧ", "evidence": "Самые онкогенные типы отрицательны во всех трёх анализах", "priority": "", "action": ""}, {"kind": "сильная", "title": "ИППП не найдены", "area": "Инфекции", "evidence": "Хламидии, гонорея, трихомонады, M. genitalium, герпес — отрицательно в 2025 и 2026", "priority": "", "action": ""}, {"kind": "сильная", "title": "Воспаление в мазке ушло", "area": "Флора", "evidence": "Лейкоциты «сплошь» и >50 в 2025 → 5–10 в 2026; Candida ++++ ушла", "priority": "", "action": ""}, {"kind": "слабая", "title": "ВПЧ 51 типа держится", "area": "ВПЧ", "evidence": "Не было в 04.2025; 5,46 lg в 05.2026; тип 51 ++++ в 10.2026 — больше 4 месяцев", "priority": "высокий", "action": "Кольпоскопия, обсудить вакцину Гардасил 9"}, {"kind": "слабая", "title": "Латентный дефицит железа", "area": "Железо", "evidence": "Ферритин 14 при норме от 15; на фоне СРБ 7,2 запас ещё ниже; длинные месячные, железо не принимает", "priority": "высокий", "action": "Ферритин, железо, ОЖСС; начать препарат железа"}, {"kind": "слабая", "title": "Нарушение влагалищной флоры", "area": "Флора", "evidence": "Gardnerella и U. parvum ++++ в 2025 и 2026; лактобацилл нет; лечение от 04.06 не пройдено", "priority": "средний", "action": "Решение врача о курсе и лечении партнёра"}, {"kind": "слабая", "title": "Мало витамина D", "area": "Витамины", "evidence": "34 нг/мл при цели 50–60; осень, D3 4 капли", "priority": "средний", "action": "Контроль 25-OH D через 2–3 месяца"}, {"kind": "слабая", "title": "Вероятный СПКЯ", "area": "Гормоны", "evidence": "Нерегулярный цикл и акне без КОК, АМГ 6,68 при медиане 1,88", "priority": "средний", "action": "Андрогены с поправкой на КОК, эндокринолог"}, {"kind": "слабая", "title": "Усталость и сонливость", "area": "Самочувствие", "evidence": "Около полугода; сон 5–6 часов, пропуски завтрака, сахар; отёчность, сухость кожи, запоры, АД 100/60", "priority": "средний", "action": "Щитовидка (Т4 св., АТ-ТПО), железо, сон и питание"}, {"kind": "слабая", "title": "Редкие и тонкие волосы", "area": "Кожа и волосы", "evidence": "Ферритин 14, витамин D 34, возможны андрогены и выпадение после температуры 27.05", "priority": "средний", "action": "Ферритин, щитовидка, андрогены, цинк"}, {"kind": "слабая", "title": "Акне без КОК, сухость кожи", "area": "Кожа и волосы", "evidence": "Акне вернулось при отмене КОК в 2021; сухость кожи отмечена врачом 13.10", "priority": "средний", "action": "Андрогены и инсулин до решения об отмене КОК"}, {"kind": "слабая", "title": "Пролактин выше нормы", "area": "Гормоны", "evidence": "626 при норме до 557; на КОК бывает выше и без болезни", "priority": "низкий", "action": "Повторить с макропролактином"}, {"kind": "слабая", "title": "Послевирусная формула крови", "area": "Кровь", "evidence": "Нейтрофилы 27,2%, лимфоциты 63,5% через 5 дней после температуры 27.05", "priority": "низкий", "action": "Повторить общий анализ крови"}], "events": [{"date": "2016", "event": "Начало КОК (с 16 лет)", "category": "Лечение", "detail": "нерегулярный цикл и акне · приём 13.10.2026"}, {"date": "2021", "event": "Отмена КОК, затем возврат (Мидиана)", "category": "Лечение", "detail": "вернулись нерегулярный цикл и акне · приём 13.10.2026"}, {"date": "2025-04-11", "event": "ПЦР, флора, цитология", "category": "Анализы", "detail": "ВПЧ не найден; Gardnerella, U. parvum, Candida ++++; NILM · Helix"}, {"date": "2026-05-27", "event": "Боли в животе, 38 °C", "category": "Эпизод", "detail": "РБ СЭМП: предположительно мезаденит · справка 03.06.2026"}, {"date": "2026-05-27", "event": "ПЦР, флора, цитология", "category": "Анализы", "detail": "ВПЧ высокого риска 5,46 lg; лактобацилл нет; NILM · Helix"}, {"date": "2026-06-01", "event": "Кровь: 27 показателей", "category": "Анализы", "detail": "ферритин 14, витамин D 34, СРБ 7,2, пролактин 626, АМГ 6,68 · Инвитро"}, {"date": "2026-06-04", "event": "Назначено лечение", "category": "Приём врача", "detail": "антибиотики, вагинальные средства, железо, D3; антибиотики не приняты · Бунделева О. А."}, {"date": "2026-10-13", "event": "Приём гинеколога", "category": "Приём врача", "detail": "сухость кожи, запоры, АД 100/60; анализы, решение о кольпоскопии · Бунделева О. А."}, {"date": "2026-10-14", "event": "ВПЧ 51 типа ++++, U. parvum ++++", "category": "Анализы", "detail": "16 и 18 типы отрицательны · Helix"}, {"date": "2026-10-14", "event": "Субцизия рубцов и «Коллост»", "category": "Процедура", "detail": "синяки на щеках держатся 11 дней и больше · со слов Степана"}], "flora": [{"date": "2025-04-11", "locus": "Влагалище", "leukocytes": "сплошь", "lactobacilli": "небольшое количество", "coccobacilli": "умеренное количество", "key_cells": "не обнаружены", "cytology": "NILM"}, {"date": "2025-04-11", "locus": "Цервикальный канал", "leukocytes": ">50", "lactobacilli": "небольшое количество", "coccobacilli": "умеренное количество", "key_cells": "не обнаружены", "cytology": "NILM"}, {"date": "2026-05-27", "locus": "Влагалище", "leukocytes": "5–10", "lactobacilli": "не обнаружены", "coccobacilli": "большое количество", "key_cells": "не обнаружены", "cytology": "NILM"}, {"date": "2026-05-27", "locus": "Цервикальный канал", "leukocytes": "5–10", "lactobacilli": "не обнаружены", "coccobacilli": "большое количество", "key_cells": "не обнаружены", "cytology": "NILM"}], "pcr": [{"test": "ВПЧ высокого риска, суммарно", "d2025_04_11": "не обнаружен", "d2026_05_27": "5.46 lg/10⁵ кл.", "d2026_10_13": "тип 51 ++++", "kind": "virus"}, {"test": "ВПЧ 16 типа", "d2025_04_11": "отр.", "d2026_05_27": "отр.", "d2026_10_13": "отр.", "kind": "virus"}, {"test": "ВПЧ 18 типа", "d2025_04_11": "отр.", "d2026_05_27": "отр.", "d2026_10_13": "отр.", "kind": "virus"}, {"test": "ВПЧ 45 типа", "d2025_04_11": "отр.", "d2026_05_27": "отр.", "d2026_10_13": "отр.", "kind": "virus"}, {"test": "ВПЧ 51 типа", "d2025_04_11": "не обнаружен", "d2026_05_27": "не типировали", "d2026_10_13": "++++", "kind": "virus"}, {"test": "Gardnerella vaginalis", "d2025_04_11": "++++", "d2026_05_27": "++++", "d2026_10_13": "не делали", "kind": "flora"}, {"test": "Ureaplasma parvum", "d2025_04_11": "++++", "d2026_05_27": "++++", "d2026_10_13": "++++", "kind": "flora"}, {"test": "Candida albicans", "d2025_04_11": "++++", "d2026_05_27": "отр.", "d2026_10_13": "не делали", "kind": "flora"}, {"test": "Ureaplasma urealyticum", "d2025_04_11": "отр.", "d2026_05_27": "отр.", "d2026_10_13": "не делали", "kind": "sti"}, {"test": "Mycoplasma genitalium", "d2025_04_11": "отр.", "d2026_05_27": "отр.", "d2026_10_13": "не делали", "kind": "sti"}, {"test": "Mycoplasma hominis", "d2025_04_11": "отр.", "d2026_05_27": "отр.", "d2026_10_13": "не делали", "kind": "sti"}, {"test": "Chlamydia trachomatis", "d2025_04_11": "отр.", "d2026_05_27": "отр.", "d2026_10_13": "не делали", "kind": "sti"}, {"test": "Neisseria gonorrhoeae", "d2025_04_11": "отр.", "d2026_05_27": "отр.", "d2026_10_13": "не делали", "kind": "sti"}, {"test": "Trichomonas vaginalis", "d2025_04_11": "отр.", "d2026_05_27": "отр.", "d2026_10_13": "не делали", "kind": "sti"}, {"test": "Herpes simplex 1/2", "d2025_04_11": "отр.", "d2026_05_27": "отр.", "d2026_10_13": "не делали", "kind": "sti"}]};</script>
+<script>
+window.dash=(function(){
+ var DATA=window.__DASH_DATA__, calcs={}, fns=[];
+ function wrap(d){ return {status:'ok',data:d,rows:d,columns:Object.keys((d&&d[0])||{}),refreshing:false,meta:[],message:''}; }
+ function data(id){
+  if(DATA[id]) return wrap(DATA[id]);
+  if(calcs[id]){ var c=calcs[id]; if(!c.cache){ try{ c.cache=c.fn.apply(null,c.inputs.map(function(i){return data(i).data;})); }catch(e){ return {status:'error',data:[],message:String(e)}; } } return wrap(c.cache); }
+  return {status:'missing',data:[],rows:[],columns:[],meta:[],message:''};
+ }
+ function run(){ fns.forEach(function(f){ try{ f(); }catch(e){ console.error(e); } }); }
+ var t=null; window.addEventListener('resize',function(){ clearTimeout(t); t=setTimeout(run,150); });
+ return { data:data, onData:function(f){ fns.push(f); try{ f(); }catch(e){ console.error(e); } },
+  calc:function(id,o){ calcs[id]={inputs:o.inputs,fn:o.fn,cache:null}; },
+  loader:function(){}, refresh:function(){}, params:function(){ return {}; }, setParams:function(){}, resetParams:function(){}, setLink:function(){},
+  colors:['var(--s1)','var(--s2)','var(--s3)','var(--s4)','var(--s5)','var(--s6)','var(--s7)','var(--s8)'] };
+})();
+</script>
+</head><body>
+<nav class="top-nav"><a href="index.html">← Все разделы</a><a class="btn" href="analizy.html">Чек-лист анализов →</a></nav>
+<p class="snap">Снимок данных на 25.10.2026: анализы крови 01.06.2026, ПЦР Helix 04.2025–10.2026, мазки и приём врача 13.10.2026. Новые результаты из чек-листа сюда сами не попадают — пришли их, и дашборд обновится.</p>
+<div id="dash-root">
+<style>
+.hs { font-family: var(--font-anthropic-sans); display: flex; flex-direction: column; gap: var(--cds-gap-xl); }
+.hs h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; text-wrap: balance; }
+.hs h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+.hs h3 { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); margin: 0; }
+.hs-head { display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+.hs-sub { color: var(--color-fg-muted); font-size: var(--cds-font-size-body); margin: 0; max-width: 70ch; }
+.hs-note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: 0; }
+.hs-sec { display: flex; flex-direction: column; gap: var(--cds-gap-md); }
+.hs-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr)); gap: var(--cds-gap-md); }
+.hs-tile, .hs-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); min-width: 0; display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+.hs-tile .lbl { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.hs-tile .big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.hs-tile .unit { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-left: .25rem; }
+.hs-tile .row { display: flex; gap: var(--cds-gap-sm); align-items: center; flex-wrap: wrap; font-size: var(--cds-font-size-caption); }
+.hs-tile .ref { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.chip { display: inline-block; font-size: var(--cds-font-size-caption); padding: 0 .5rem; border-radius: 999px; border: 1px solid currentColor; line-height: 1.5; white-space: nowrap; }
+.st-ok { color: var(--color-ok); } .st-bad { color: var(--color-bad); } .st-warn { color: var(--color-warn); } .st-mute { color: var(--color-fg-muted); }
+.hs-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--cds-gap-md); align-items: start; }
+.hs-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.hs-list li { display: flex; flex-direction: column; gap: .2rem; padding: var(--cds-pad-sm) 0; border-top: 1px solid var(--color-border-line); }
+.hs-list li:first-child { border-top: 0; }
+.hs-list .t { display: flex; gap: var(--cds-gap-sm); align-items: baseline; justify-content: space-between; }
+.hs-list .t b { font-weight: var(--cds-font-weight-medium); }
+.hs-list .ar { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.hs-list .ev { font-size: var(--cds-font-size-caption); text-align: justify; }
+.hs-list .ac { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.hs-count { font-family: var(--font-anthropic-serif); font-size: var(--cds-font-size-heading); font-variant-numeric: tabular-nums; }
+.hs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--cds-gap-md); }
+.hs-chart { position: relative; min-height: 150px; }
+.hs-chart svg { display: block; overflow: visible; }
+.hs-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space: nowrap; z-index: 2; }
+.hs-tip .d { color: var(--cds-text-secondary); }
+.hs-ctrl { display: flex; gap: var(--cds-gap-sm); flex-wrap: wrap; align-items: center; }
+.hs-ctrl input, .hs-ctrl select { font: inherit; font-size: var(--cds-font-size-caption); padding: .3rem .5rem; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-bg); color: var(--color-fg); min-width: 0; }
+.hs-tbl-wrap { max-height: 32rem; overflow: auto; }
+.hs-tbl { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.hs-tbl th { position: sticky; top: 0; background: var(--color-panel); text-align: left; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+.hs-tbl th button { all: unset; cursor: pointer; }
+.hs-tbl th button:focus-visible { outline: 2px solid var(--color-fg); }
+.hs-tbl td { padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
+.hs-tbl td.num { text-align: right; white-space: nowrap; }
+@media (max-width: 40rem) { .hs-tbl .opt { display: none; } }
+.hs-tl { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.hs-tl li { display: grid; grid-template-columns: 6.5rem 1fr; gap: var(--cds-gap-sm); padding: var(--cds-pad-sm) 0; border-top: 1px solid var(--color-border-line); }
+.hs-tl li:first-child { border-top: 0; }
+.hs-tl .dt { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.hs-tl .bd { display: flex; flex-direction: column; gap: .15rem; min-width: 0; }
+.hs-tl .dl { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+[data-dash-source-state=empty] { color: transparent; }
+[data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+.hs-fail { display: flex; align-items: center; justify-content: center; gap: .4rem; min-height: inherit; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.hs-fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
+</style>
+
+<div class="hs">
+  <header class="hs-head" id="top">
+    <h1>Здоровье Валерии</h1>
+    <p class="hs-sub dash-skeleton" id="takeaway" data-source="summary"></p>
+    <p class="hs-note">Кровь Инвитро 01.06.2026, ПЦР, флора и цитология Helix (04.2025, 05.2026, 10.2026), приёмы гинеколога 04.06 и 13.10.2026. Справочный обзор, не диагноз: решения по лечению принимает врач.</p>
+  </header>
+
+  <section class="hs-sec" id="key">
+    <h2>Ключевые показатели — последний замер</h2>
+    <div class="hs-tiles" id="tiles"></div>
+  </section>
+
+  <section class="hs-sec" id="sw">
+    <h2>Сильные и слабые стороны</h2>
+    <div class="hs-two">
+      <div class="hs-card">
+        <div class="hs-ctrl" style="justify-content:space-between"><h3>Сильные стороны</h3><span class="hs-count st-ok" data-source="summary" data-field="strengths" data-row="0" id="nS">—</span></div>
+        <ul class="hs-list" id="listS" data-source="findings"></ul>
+      </div>
+      <div class="hs-card">
+        <div class="hs-ctrl" style="justify-content:space-between"><h3>Слабые стороны и зоны внимания</h3><span class="hs-count st-bad" data-source="summary" data-field="weaknesses" data-row="0" id="nW">—</span></div>
+        <ul class="hs-list" id="listW" data-source="findings"></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="hs-sec" id="trends">
+    <h2>Динамика</h2>
+    <p class="hs-note">Закрашенная полоса — референсный интервал лаборатории. Точка красная, если результат вне нормы. Кровь сдавалась один раз, поэтому у неё одна точка; динамика появится со следующими анализами.</p>
+    <div class="hs-grid" id="charts"></div>
+  </section>
+
+  <section class="hs-sec" id="all">
+    <h2>Все показатели</h2>
+    <div class="hs-card">
+      <div class="hs-ctrl">
+        <input id="q" type="search" placeholder="Поиск показателя" aria-label="Поиск показателя">
+        <select id="grp" aria-label="Группа"><option value="">Все группы</option></select>
+        <select id="sts" aria-label="Статус"><option value="">Любой статус</option><option value="норма">В норме</option><option value="out">Вне нормы</option></select>
+      </div>
+      <div class="hs-tbl-wrap">
+        <table class="hs-tbl" id="tbl" data-source="latest" data-row-key="mid">
+          <thead><tr>
+            <th data-field="metric"><button data-k="metric">Показатель</button></th>
+            <th data-field="group" class="opt"><button data-k="group">Группа</button></th>
+            <th data-field="value"><button data-k="value">Результат</button></th>
+            <th data-field="unit">Ед.</th>
+            <th data-field="ref">Норма</th>
+            <th data-field="status"><button data-k="status">Статус</button></th>
+            <th data-field="prev" class="opt">Прошлый</th>
+            <th data-field="date" class="opt"><button data-k="date">Дата</button></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="hs-sec" id="infections">
+    <h2>Инфекции и флора по датам</h2>
+    <div class="hs-card">
+      <div class="hs-ctrl">
+        <select id="pf" aria-label="Фильтр инфекций"><option value="">Все показатели</option><option value="pos">Только найденные</option></select>
+      </div>
+      <div class="hs-tbl-wrap">
+        <table class="hs-tbl" id="ptbl" data-source="pcr" data-row-key="test">
+          <thead><tr>
+            <th data-field="test">Показатель (ПЦР, Helix)</th>
+            <th data-field="d2025_04_11">11.04.2025</th>
+            <th data-field="d2026_05_27">27.05.2026</th>
+            <th data-field="d2026_10_13">13.10.2026</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="hs-card">
+      <h3>Мазок на флору и цитология</h3>
+      <p class="hs-note">Воспаление за год заметно снизилось, но лактобациллы исчезли совсем. Цитология оба раза без изменений.</p>
+      <div class="hs-tbl-wrap">
+        <table class="hs-tbl" id="ftbl" data-source="flora" data-row-key="date,locus">
+          <thead><tr>
+            <th data-field="date">Дата</th><th data-field="locus">Зона</th><th data-field="leukocytes">Лейкоциты</th><th data-field="lactobacilli">Лактобациллы</th><th data-field="coccobacilli" class="opt">Коккобациллы</th><th data-field="cytology">Цитология</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="hs-sec" id="timeline">
+    <h2>Хронология</h2>
+    <div class="hs-card"><ul class="hs-tl" id="tl" data-source="events"></ul></div>
+  </section>
+</div>
+
+<script>
+dash.calc('latest', {
+  title: 'Последний результат по показателю',
+  description: 'Для каждого показателя берёт самый свежий замер и предыдущий, считает изменение.',
+  inputs: ['labs'],
+  fn: (labs) => {
+    const by = {};
+    labs.forEach(r => { (by[r.mid] = by[r.mid] || []).push(r); });
+    return Object.values(by).map(rs => {
+      rs.sort((a, b) => a.date < b.date ? -1 : 1);
+      const l = rs[rs.length - 1], p = rs.length > 1 ? rs[rs.length - 2] : null;
+      return { mid: l.mid, group: l.group, metric: l.metric, value: l.value, unit: l.unit, ref: l.ref, status: l.status, date: l.date,
+        prev: p ? p.value : null, prev_date: p ? p.date : null,
+        change: p ? Math.round((l.value - p.value) * 100) / 100 : null };
+    });
+  }
+});
+dash.calc('summary', {
+  title: 'Итог сильных и слабых сторон',
+  description: 'Считает сильные стороны, слабые и слабые с высоким приоритетом.',
+  inputs: ['findings'],
+  fn: (findings) => [{
+    strengths: findings.filter(f => f.kind === 'сильная').length,
+    weaknesses: findings.filter(f => f.kind === 'слабая').length,
+    high: findings.filter(f => f.kind === 'слабая' && f.priority === 'высокий').length
+  }]
+});
+
+window.hsFmt = (v) => v == null ? '—' : new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(v);
+window.hsDate = (s) => !s ? '—' : (s.length === 4 ? s + ' г.' : s.slice(8, 10) + '.' + s.slice(5, 7) + '.' + s.slice(0, 4));
+window.hsStCls = (s) => s === 'норма' ? 'st-ok' : 'st-bad';
+window.hsFail = (el, st) => { el.textContent = ''; if (st === 'error' || st === 'connect') { const d = document.createElement('div'); d.className = 'hs-fail'; d.textContent = 'Failed to load'; el.appendChild(d); } };
+</script>
+
+<script>
+// Заголовок и плитки
+const TILES = [
+  { mid: 'hpv', lbl: 'ВПЧ высокого риска', good: 'down' },
+  { mid: 'ferr', lbl: 'Ферритин', good: 'up' },
+  { mid: 'vitd', lbl: 'Витамин D', good: 'up' },
+  { mid: 'crp', lbl: 'С-реактивный белок', good: 'down' },
+  { mid: 'prl', lbl: 'Пролактин', good: 'down' },
+  { mid: 'amh', lbl: 'АМГ', good: 'down' }
+];
+const tilesEl = document.getElementById('tiles');
+TILES.forEach(t => {
+  const d = document.createElement('div');
+  d.className = 'hs-tile'; d.id = 'tile-' + t.mid;
+  d.innerHTML = `<span class="lbl"></span><div><span class="big dash-skeleton" data-source="latest" data-field="value" data-where="mid=${t.mid}"></span><span class="unit" data-source="latest" data-field="unit" data-where="mid=${t.mid}"></span></div>
+  <div class="row"><span class="chip" data-source="latest" data-field="status" data-where="mid=${t.mid}"></span><span class="dlt" data-source="latest" data-field="change" data-where="mid=${t.mid}"></span></div>
+  <span class="ref"></span>`;
+  d.querySelector('.lbl').textContent = t.lbl;
+  if (t.mid === 'hpv') {
+    const x = document.createElement('span'); x.className = 'ref';
+    x.append('13.10.2026: тип 51 — ');
+    const v = document.createElement('span'); v.id = 'hpv51';
+    v.setAttribute('data-source', 'pcr'); v.setAttribute('data-field', 'd2026_10_13'); v.setAttribute('data-where', 'test=' + encodeURIComponent('ВПЧ 51 типа'));
+    x.appendChild(v); d.appendChild(x);
+  }
+  tilesEl.appendChild(d);
+});
+
+dash.onData(() => {
+  const s = dash.data('summary'), take = document.getElementById('takeaway');
+  if (s.status === 'ok' && s.data.length) {
+    const r = s.data[0];
+    take.classList.remove('dash-skeleton');
+    take.textContent = `${r.strengths} сильных сторон и ${r.weaknesses} зон внимания, из них ${r.high} с высоким приоритетом: ВПЧ 51 типа и скрытый дефицит железа. Печень, почки, свёртывание, ТТГ и цитология шейки — в норме.`;
+    document.getElementById('nS').textContent = r.strengths;
+    document.getElementById('nW').textContent = r.weaknesses;
+  } else if (s.status !== 'loading') { hsFail(take, s.status); take.classList.remove('dash-skeleton'); }
+
+  const P = dash.data('pcr'), h51 = document.getElementById('hpv51');
+  if (P.status === 'ok') { const r = P.data.find(x => x.test === 'ВПЧ 51 типа'); h51.textContent = r ? r.d2026_10_13 : '—'; } else h51.textContent = '—';
+
+  const L = dash.data('latest');
+  TILES.forEach(t => {
+    const el = document.getElementById('tile-' + t.mid);
+    const big = el.querySelector('.big'), unit = el.querySelector('.unit'), chip = el.querySelector('.chip'), dl = el.querySelector('.dlt'), ref = el.querySelector('.ref');
+    if (L.status !== 'ok') { if (L.status !== 'loading') big.classList.remove('dash-skeleton'); big.textContent = ''; return; }
+    const r = L.data.find(x => x.mid === t.mid);
+    big.classList.remove('dash-skeleton');
+    if (!r) { big.textContent = '—'; return; }
+    big.textContent = hsFmt(r.value);
+    unit.textContent = r.unit;
+    chip.textContent = r.status;
+    chip.className = 'chip ' + hsStCls(r.status);
+    if (r.change != null) {
+      const better = t.good === 'down' ? r.change < 0 : r.change > 0;
+      dl.textContent = (r.change > 0 ? '+' : r.change < 0 ? '−' : '') + hsFmt(Math.abs(r.change)) + ' с ' + hsDate(r.prev_date);
+      dl.className = 'dlt ' + (r.change === 0 ? 'st-mute' : better ? 'st-ok' : 'st-bad');
+    } else { dl.textContent = 'один замер'; dl.className = 'dlt st-mute'; }
+    ref.textContent = 'Норма ' + r.ref + ' · ' + hsDate(r.date);
+  });
+});
+</script>
+
+<script>
+// Сильные и слабые стороны
+const PR = { 'высокий': 'st-bad', 'средний': 'st-warn', 'низкий': 'st-mute' };
+const PO = { 'высокий': 0, 'средний': 1, 'низкий': 2, '': 3 };
+dash.onData(() => {
+  const F = dash.data('findings');
+  const lS = document.getElementById('listS'), lW = document.getElementById('listW');
+  [lS, lW].forEach(l => l.textContent = '');
+  if (F.status !== 'ok') { if (F.status !== 'loading') { hsFail(lS, F.status); hsFail(lW, F.status); } return; }
+  const put = (l, f) => {
+    const li = document.createElement('li');
+    const t = document.createElement('div'); t.className = 't';
+    const b = document.createElement('b'); let tt = String(f.title || '').replace(/:\s/g, ' — '); const ar0 = String(f.area || ''); const same = ar0 && tt.toLowerCase().startsWith(ar0.toLowerCase()); if (!same && tt.length > 1 && tt[1] === tt[1].toLowerCase()) tt = tt[0].toLowerCase() + tt.slice(1); b.textContent = (ar0 && !same ? ar0 + ': ' : '') + tt; t.appendChild(b);
+    if (f.priority) { const c = document.createElement('span'); c.className = 'chip ' + (PR[f.priority] || 'st-mute'); c.textContent = f.priority; t.appendChild(c); }
+    li.appendChild(t);
+    
+    const ev = document.createElement('span'); ev.className = 'ev'; ev.textContent = f.evidence; li.appendChild(ev);
+    if (f.action) { const ac = document.createElement('span'); ac.className = 'ac'; ac.textContent = 'Что сделать: ' + f.action; li.appendChild(ac); }
+    l.appendChild(li);
+  };
+  F.data.filter(f => f.kind === 'сильная').forEach(f => put(lS, f));
+  F.data.filter(f => f.kind === 'слабая').slice().sort((a, b) => PO[a.priority] - PO[b.priority]).forEach(f => put(lW, f));
+});
+</script>
+
+<script>
+// Мини-графики динамики
+const CH = [
+  { mid: 'hpv', t: 'ВПЧ высокого риска, lg/10⁵ кл.' }, { mid: 'ferr', t: 'Ферритин' }, { mid: 'vitd', t: 'Витамин D' },
+  { mid: 'crp', t: 'С-реактивный белок' }, { mid: 'prl', t: 'Пролактин' }, { mid: 'amh', t: 'АМГ' },
+  { mid: 'hb', t: 'Гемоглобин' }, { mid: 'neut_p', t: 'Нейтрофилы, %' }, { mid: 'lymph_p', t: 'Лимфоциты, %' }
+];
+const host = document.getElementById('charts');
+CH.forEach(c => {
+  const d = document.createElement('div'); d.className = 'hs-card'; d.id = 'ch-' + c.mid;
+  d.innerHTML = '<h3></h3><p class="hs-note"></p><div class="hs-chart dash-skeleton" data-source="labs"></div>';
+  d.querySelector('h3').textContent = c.t;
+  host.appendChild(d);
+});
+dash.onData(() => {
+  const D = dash.data('labs');
+  CH.forEach(c => {
+    const card = document.getElementById('ch-' + c.mid), box = card.querySelector('.hs-chart'), note = card.querySelector('.hs-note');
+    box.textContent = '';
+    if (D.status !== 'ok') { if (D.status !== 'loading') { box.classList.remove('dash-skeleton'); hsFail(box, D.status); } return; }
+    box.classList.remove('dash-skeleton');
+    const rs = D.data.filter(r => r.mid === c.mid).map(r => ({ ...r, d: new Date(r.date + 'T00:00:00Z') })).sort((a, b) => a.d - b.d);
+    if (!rs.length) return;
+    const last = rs[rs.length - 1];
+    note.textContent = rs.length > 1
+      ? `${hsFmt(rs[0].value)} → ${hsFmt(last.value)} ${last.unit} · норма ${last.ref}`
+      : `${hsFmt(last.value)} ${last.unit} · норма ${last.ref}`;
+    const W = Math.max(220, box.clientWidth), H = 150, m = { t: 10, r: 14, b: 22, l: 36 };
+    const vals = rs.map(r => r.value).concat([last.ref_low, last.ref_high].filter(v => v != null));
+    let lo = d3.min(vals), hi = d3.max(vals); const pad = (hi - lo) * 0.15 || hi * 0.1 || 1;
+    lo = Math.max(0, lo - pad); hi = hi + pad;
+    if (last.ref_high != null && last.ref_high * 3 < hi && last.ref_high > 0) hi = d3.max(rs, r => r.value) + pad;
+    const t0 = d3.utcMonth.offset(rs[0].d, -2), t1 = d3.utcMonth.offset(last.d, 2);
+    const x = d3.scaleUtc([t0, t1], [m.l, W - m.r]);
+    const y = d3.scaleLinear([lo, hi], [H - m.b, m.t]).nice(4);
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
+    svg.append('g').selectAll('line').data(y.ticks(4)).join('line')
+      .attr('x1', m.l).attr('x2', W - m.r).attr('y1', d => y(d)).attr('y2', d => y(d)).attr('stroke', 'var(--cds-chart-grid)');
+    const bandLo = last.ref_low != null ? Math.max(last.ref_low, y.domain()[0]) : y.domain()[0];
+    const bandHi = last.ref_high != null ? Math.min(last.ref_high, y.domain()[1]) : y.domain()[1];
+    if (bandHi > bandLo) svg.append('rect').attr('x', m.l).attr('width', W - m.l - m.r).attr('y', y(bandHi)).attr('height', y(bandLo) - y(bandHi))
+      .attr('fill', 'var(--color-ok)').attr('opacity', .1);
+    [last.ref_low, last.ref_high].filter(v => v != null && v >= y.domain()[0] && v <= y.domain()[1]).forEach(v =>
+      svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(v)).attr('y2', y(v)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '3 3'));
+    const ya = svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(4).tickSize(0).tickFormat(v => hsFmt(v)));
+    ya.attr('font-size', null).attr('font-family', null).select('.domain').remove();
+    ya.selectAll('text').attr('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)');
+    const xa = svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickValues(rs.map(r => r.d)).tickSize(0).tickPadding(6).tickFormat(d3.utcFormat('%m.%y')));
+    xa.attr('font-size', null).attr('font-family', null).select('.domain').attr('stroke', 'var(--cds-chart-axis)');
+    xa.selectAll('text').attr('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)');
+    svg.append('path').datum(rs).attr('fill', 'none').attr('stroke', dash.colors[0]).attr('stroke-width', 2)
+      .attr('stroke-linecap', 'round').attr('stroke-linejoin', 'round').attr('d', d3.line(r => x(r.d), r => y(r.value)));
+    svg.append('g').selectAll('circle').data(rs).join('circle').attr('cx', r => x(r.d)).attr('cy', r => y(r.value)).attr('r', 4)
+      .attr('fill', r => r.status === 'норма' ? dash.colors[0] : 'var(--cds-chart-status-critical)')
+      .attr('stroke', 'var(--color-panel)').attr('stroke-width', 1.5);
+    const tip = document.createElement('div'); tip.className = 'hs-tip'; tip.hidden = true; box.appendChild(tip);
+    svg.append('rect').attr('x', m.l).attr('y', 0).attr('width', W - m.l - m.r).attr('height', H).attr('fill', 'transparent')
+      .on('pointermove', (ev) => {
+        const [mx] = d3.pointer(ev);
+        const r = rs.reduce((a, b) => Math.abs(x(b.d) - mx) < Math.abs(x(a.d) - mx) ? b : a);
+        tip.textContent = '';
+        const dd = document.createElement('div'); dd.className = 'd'; dd.textContent = hsDate(r.date) + ' · ' + r.lab;
+        const vv = document.createElement('div'); vv.textContent = `${hsFmt(r.value)} ${r.unit} — ${r.status}`;
+        tip.append(dd, vv); tip.hidden = false;
+        const bw = box.clientWidth, px = x(r.d) / W * bw;
+        tip.style.left = Math.min(Math.max(0, px - tip.offsetWidth / 2), bw - tip.offsetWidth) + 'px';
+        tip.style.top = Math.max(0, y(r.value) - 44) + 'px';
+      })
+      .on('pointerleave', () => { tip.hidden = true; });
+  });
+});
+</script>
+
+<script>
+// Таблица всех показателей
+const tb = document.querySelector('#tbl tbody'), q = document.getElementById('q'), grp = document.getElementById('grp'), sts = document.getElementById('sts');
+let sortK = 'status', sortDir = 1, grpFilled = false;
+const SO = (r) => r.status === 'норма' ? 1 : 0;
+function drawTbl() {
+  const L = dash.data('latest');
+  tb.textContent = '';
+  if (L.status !== 'ok') return;
+  if (!grpFilled) {
+    [...new Set(L.data.map(r => r.group))].forEach(g => { const o = document.createElement('option'); o.value = g; o.textContent = g; grp.appendChild(o); });
+    grpFilled = true;
+  }
+  const s = q.value.trim().toLowerCase();
+  let rs = L.data.filter(r => (!s || r.metric.toLowerCase().includes(s)) && (!grp.value || r.group === grp.value)
+    && (!sts.value || (sts.value === 'out' ? r.status !== 'норма' : r.status === 'норма')));
+  rs.sort((a, b) => {
+    const av = sortK === 'status' ? SO(a) : a[sortK], bv = sortK === 'status' ? SO(b) : b[sortK];
+    if (av === bv) return a.group < b.group ? -1 : a.group > b.group ? 1 : (a.metric < b.metric ? -1 : 1);
+    return (av < bv ? -1 : 1) * sortDir;
+  });
+  rs.forEach(r => {
+    const tr = document.createElement('tr'); tr.dataset.key = r.mid;
+    const cell = (txt, cls) => { const td = document.createElement('td'); if (cls) td.className = cls; td.textContent = txt; tr.appendChild(td); return td; };
+    cell(r.metric); cell(r.group, 'opt'); cell(hsFmt(r.value), 'num'); cell(r.unit); cell(r.ref);
+    const st = cell(''); const c = document.createElement('span'); c.className = 'chip ' + hsStCls(r.status); c.textContent = r.status; st.appendChild(c);
+    cell(r.prev == null ? '—' : hsFmt(r.prev), 'num opt'); cell(hsDate(r.date), 'opt');
+    tb.appendChild(tr);
+  });
+  document.querySelectorAll('#tbl th').forEach(th => {
+    const b = th.querySelector('button');
+    th.setAttribute('aria-sort', b && b.dataset.k === sortK ? (sortDir > 0 ? 'ascending' : 'descending') : 'none');
+  });
+}
+document.querySelectorAll('#tbl th button').forEach(b => b.addEventListener('click', () => {
+  if (sortK === b.dataset.k) sortDir = -sortDir; else { sortK = b.dataset.k; sortDir = 1; }
+  drawTbl();
+}));
+[q, grp, sts].forEach(el => el.addEventListener('input', drawTbl));
+dash.onData(drawTbl);
+</script>
+
+<script>
+// Инфекции, флора, хронология
+const pb = document.querySelector('#ptbl tbody'), pf = document.getElementById('pf');
+const PCOLS = ['d2025_04_11', 'd2026_05_27', 'd2026_10_13'];
+const pCls = (v) => !v ? 'st-mute' : (v.indexOf('++++') >= 0 || /lg/.test(v)) ? 'st-bad' : (v === 'отр.' || v === 'не обнаружен') ? 'st-ok' : 'st-mute';
+function drawPcr() {
+  const P = dash.data('pcr');
+  pb.textContent = '';
+  if (P.status !== 'ok') return;
+  P.data.filter(r => !pf.value || PCOLS.some(k => pCls(r[k]) === 'st-bad')).forEach(r => {
+    const tr = document.createElement('tr'); tr.dataset.key = r.test;
+    const n = document.createElement('td'); n.textContent = r.test; tr.appendChild(n);
+    PCOLS.forEach(k => { const td = document.createElement('td'); const c = document.createElement('span'); c.className = 'chip ' + pCls(r[k]); c.textContent = r[k]; td.appendChild(c); tr.appendChild(td); });
+    pb.appendChild(tr);
+  });
+}
+pf.addEventListener('input', drawPcr);
+dash.onData(drawPcr);
+
+const fb = document.querySelector('#ftbl tbody');
+dash.onData(() => {
+  const Fl = dash.data('flora');
+  fb.textContent = '';
+  if (Fl.status !== 'ok') return;
+  Fl.data.forEach(r => {
+    const tr = document.createElement('tr'); tr.dataset.key = encodeURIComponent(r.date) + ',' + encodeURIComponent(r.locus);
+    const cell = (txt, cls, chip) => { const td = document.createElement('td'); if (cls) td.className = cls; if (chip) { const c = document.createElement('span'); c.className = 'chip ' + chip; c.textContent = txt; td.appendChild(c); } else td.textContent = txt; tr.appendChild(td); };
+    cell(hsDate(r.date)); cell(r.locus);
+    cell(r.leukocytes, '', (r.leukocytes === 'сплошь' || r.leukocytes === '>50') ? 'st-bad' : 'st-ok');
+    cell(r.lactobacilli, '', r.lactobacilli === 'не обнаружены' ? 'st-bad' : 'st-warn');
+    cell(r.coccobacilli, 'opt'); cell(r.cytology, '', 'st-ok');
+    fb.appendChild(tr);
+  });
+});
+
+dash.onData(() => {
+  const E = dash.data('events'), tl = document.getElementById('tl');
+  tl.textContent = '';
+  if (E.status !== 'ok') { if (E.status !== 'loading') hsFail(tl, E.status); return; }
+  E.data.slice().sort((a, b) => a.date < b.date ? 1 : -1).forEach(e => {
+    const li = document.createElement('li');
+    const dt = document.createElement('span'); dt.className = 'dt'; dt.textContent = hsDate(e.date);
+    const bd = document.createElement('div'); bd.className = 'bd';
+    const h = document.createElement('b'); h.textContent = e.event;
+    const c = document.createElement('span'); c.className = 'dl'; c.textContent = e.category + ' · ' + e.detail;
+    bd.append(h, c); li.append(dt, bd); tl.appendChild(li);
+  });
+});
+</script>
+
+</div>
+<script>if('serviceWorker' in navigator && location.protocol!=='file:'){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+</body></html>
